@@ -1,0 +1,80 @@
+@CHARSET "UTF-8";
+
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+body {
+	margin-bottom: 60px;
+	padding-top: 65px;
+}
+
+#bodyBack {
+	background-image: url("./images/bg1.jpg");
+	background-size: 100%;
+}
+
+#BgImages {
+	padding-top: 50px;
+}
+
+#LogContainer {
+	padding-top: 200px;
+	padding-bottom: 200px;
+}
+
+#LogContainer h3 {
+	font-weight: bold
+}
+
+#RegContainer {
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
+#input {
+	padding-bottom: 30px;
+}
+
+#BodyMain {
+	background-color: #F5F5F5;
+}
+
+.bs-callout {
+	padding: 20px;
+	margin: 20px 0;
+	border: 1px solid #eee;
+	border-left-width: 5px;
+	border-radius: 3px;
+}
+
+.bs-callout h4 {
+	margin-top: 0;
+	margin-bottom: 5px;
+}
+
+.bs-callout p:last-child {
+	margin-bottom: 0;
+}
+
+.bs-callout code {
+	border-radius: 3px;
+}
+
+.bs-callout+.bs-callout {
+	margin-top: -5px;
+}
+
+.bs-callout-success {
+	border-left-color: #5cb85c;
+}
+
+.bs-callout-success h3 {
+	color: #5cb85c;
+}
+
+.centered {
+	margin: 0 auto;
+}
+}
