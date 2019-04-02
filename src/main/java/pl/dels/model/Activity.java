@@ -1,6 +1,8 @@
 package pl.dels.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,10 +25,20 @@ public class Activity implements Serializable {
 	private Long id;
 	@Column(nullable = false, name = "machine_number")
 	private String machineNumber;
+	@Column(nullable = false, name = "work_order")
+	private String workOrder;
 	@Column(nullable = false)
 	private String side;
 	@Column(nullable = false, name = "activity_type")
 	private String activityType;
+	@Column
+	private String comments;
+	@Column(nullable = false, name = "start_date_time")
+	private Timestamp startDateTime;
+	@Column(nullable = false, name = "stop_date_time")
+	private Timestamp stopDateTime;
+	@Column(nullable = false)
+	private int downtime;
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -35,13 +47,16 @@ public class Activity implements Serializable {
 
 	}
 
-	public Activity(Long id, String machineNumber, String side, String activityType, User user) {
-		super();
-		this.id = id;
+	public Activity(String machineNumber, String workOrder, String side, String activityType, String comments,
+			Timestamp startDateTime, Timestamp stopDateTime, int downtime) {
 		this.machineNumber = machineNumber;
+		this.workOrder = workOrder;
 		this.side = side;
 		this.activityType = activityType;
-		this.user = user;
+		this.comments = comments;
+		this.startDateTime = startDateTime;
+		this.stopDateTime = stopDateTime;
+		this.downtime = downtime;
 	}
 
 	public Long getId() {
@@ -60,6 +75,14 @@ public class Activity implements Serializable {
 		this.machineNumber = machineNumber;
 	}
 
+	public String getWorkOrder() {
+		return workOrder;
+	}
+
+	public void setWorkOrder(String workOrder) {
+		this.workOrder = workOrder;
+	}
+
 	public String getSide() {
 		return side;
 	}
@@ -74,6 +97,38 @@ public class Activity implements Serializable {
 
 	public void setActivityType(String activityType) {
 		this.activityType = activityType;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	public Timestamp getStartDateTime() {
+		return startDateTime;
+	}
+
+	public void setStartDateTime(Timestamp startDateTime) {
+		this.startDateTime = startDateTime;
+	}
+
+	public Timestamp getStopDateTime() {
+		return stopDateTime;
+	}
+
+	public void setStopDateTime(Timestamp stopDateTime) {
+		this.stopDateTime = stopDateTime;
+	}
+
+	public int getDowntime() {
+		return downtime;
+	}
+
+	public void setDowntime(int downtime) {
+		this.downtime = downtime;
 	}
 
 	public User getUser() {
@@ -93,10 +148,15 @@ public class Activity implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((activityType == null) ? 0 : activityType.hashCode());
+		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
+		result = prime * result + downtime;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((machineNumber == null) ? 0 : machineNumber.hashCode());
 		result = prime * result + ((side == null) ? 0 : side.hashCode());
+		result = prime * result + ((startDateTime == null) ? 0 : startDateTime.hashCode());
+		result = prime * result + ((stopDateTime == null) ? 0 : stopDateTime.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		result = prime * result + ((workOrder == null) ? 0 : workOrder.hashCode());
 		return result;
 	}
 
@@ -114,6 +174,13 @@ public class Activity implements Serializable {
 				return false;
 		} else if (!activityType.equals(other.activityType))
 			return false;
+		if (comments == null) {
+			if (other.comments != null)
+				return false;
+		} else if (!comments.equals(other.comments))
+			return false;
+		if (downtime != other.downtime)
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -129,17 +196,33 @@ public class Activity implements Serializable {
 				return false;
 		} else if (!side.equals(other.side))
 			return false;
+		if (startDateTime == null) {
+			if (other.startDateTime != null)
+				return false;
+		} else if (!startDateTime.equals(other.startDateTime))
+			return false;
+		if (stopDateTime == null) {
+			if (other.stopDateTime != null)
+				return false;
+		} else if (!stopDateTime.equals(other.stopDateTime))
+			return false;
 		if (user == null) {
 			if (other.user != null)
 				return false;
 		} else if (!user.equals(other.user))
+			return false;
+		if (workOrder == null) {
+			if (other.workOrder != null)
+				return false;
+		} else if (!workOrder.equals(other.workOrder))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Activity [id=" + id + ", machineNumber=" + machineNumber + ", side=" + side + ", activityType="
-				+ activityType + ", user=" + user + "]";
+		return "Activity [id=" + id + ", machineNumber=" + machineNumber + ", workOrder=" + workOrder + ", side=" + side
+				+ ", activityType=" + activityType + ", comments=" + comments + ", startDateTime=" + startDateTime
+				+ ", stopDateTime=" + stopDateTime + ", downtime=" + downtime + ", user=" + user + "]";
 	}
 }
