@@ -5,18 +5,16 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="${pageContext.request.contextPath}">Activity Recorder</a>
+			<a class="navbar-brand" href="${pageContext.request.contextPath}">Activity
+				Recorder</a>
 		</div>
 		<ul class="nav navbar-nav navbar-right">
 			<c:choose>
 				<c:when test="${pageContext['request'].userPrincipal != null}">
+					<a class="navbar-brand" href="${pageContext.request.contextPath}">${pageContext['request'].userPrincipal.name}</a>
 					<li><a href="${pageContext.request.contextPath}/logout">Wyloguj
 							się</a></li>
 				</c:when>
-				<c:otherwise>
-					<li><a href="${pageContext.request.contextPath}/login">Zaloguj
-							się</a></li>
-				</c:otherwise>
 			</c:choose>
 		</ul>
 	</div>
