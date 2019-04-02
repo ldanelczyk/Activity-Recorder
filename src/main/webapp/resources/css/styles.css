@@ -20,8 +20,8 @@ body {
 }
 
 #LogContainer {
-	padding-top: 200px;
-	padding-bottom: 200px;
+	padding-top: 100px;
+	padding-bottom: 190px;
 }
 
 #LogContainer h3 {
@@ -29,11 +29,15 @@ body {
 }
 
 #RegContainer {
-	padding-top: 30px;
-	padding-bottom: 30px;
+	padding-top: 50px;
+	padding-bottom: 70px;
 }
 
 #input {
+	padding-bottom: 20px;
+}
+
+#inputLog {
 	padding-bottom: 30px;
 }
 
