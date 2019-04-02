@@ -1,4 +1,4 @@
-package pl.danelczyk.security;
+package pl.dels.security;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import pl.dels.model.Role;
 import pl.dels.model.User;
-import pl.danelczyk.repository.UserRepository;
+import pl.dels.repository.UserRepository;
 
 public class CustomUserDetailsService implements UserDetailsService {
 
