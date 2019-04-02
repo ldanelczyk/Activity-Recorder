@@ -37,13 +37,9 @@ public class User implements Serializable {
 
 	}
 
-	public User(Long id, String username, String password, Set<Role> roles, List<Activity> activities) {
-		super();
-		this.id = id;
+	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
-		this.roles = roles;
-		this.activities = activities;
 	}
 
 	public Long getId() {
