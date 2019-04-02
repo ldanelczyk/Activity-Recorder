@@ -4,7 +4,6 @@
 
 <!DOCTYPE html>
 <html>
-
 <head>
 <title>Activity Recorder</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -25,6 +24,21 @@
 
 	<jsp:include page="fragment/navbar.jsp" />
 
+	<div class="row" id="BgImages">
+		<div class="col-md-2 col-md-offset-1">
+			<div class="container">
+				<img src="resources/css/images/sil.jpg" class="img-thumbnail"
+					alt="sil">
+			</div>
+		</div>
+		<div class="col-md-2 col-md-offset-6">
+			<div class="container">
+				<img src="resources/css/images/tst.jpg" class="img-thumbnail"
+					alt="tst">
+			</div>
+		</div>
+	</div>
+
 	<div class="container" id="LogContainer">
 		<div class="row vertical-offset-100">
 			<div class="col-md-4 col-md-offset-4">
@@ -36,7 +50,7 @@
 						<form accept-charset="UTF-8" role="form" method="post"
 							action="login">
 							<fieldset>
-								<div class="row" id="input">
+								<div class="row" id="inputLog">
 									<div class="form-group required">
 										<div class="col-md-11 ">
 											<input class="form-control" name="username"
@@ -45,7 +59,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="row" id="input">
+								<div class="row" id="inputLog">
 									<div class="form-group required">
 										<div class="col-md-11 ">
 											<input class="form-control" placeholder="Hasło"
@@ -75,6 +89,5 @@
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script
 		src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
 </body>
 </html>
