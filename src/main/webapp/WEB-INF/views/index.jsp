@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
-<!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%><!DOCTYPE html>
 <html>
 <head>
 <title>Activity Recorder</title>
@@ -48,7 +48,7 @@
 					</div>
 					<div class="panel-body">
 						<form class="form-signin" method="post"
-							action="${pageContext.request.contextPath}/register">
+							action="${pageContext.request.contextPath}/stopRegistration">
 
 							<fieldset>
 								<div class="row" id="input">
@@ -74,8 +74,8 @@
 
 									<div class="col-md-8">
 										Typ operacji: <select class="form-control">
-											<option value="writeAOI">Pisanie programu AOI</option>
-											<option value="improveAOI">Poprawa programu AOI</option>
+											<option value="writeAOIprogram">Pisanie programu AOI</option>
+											<option value="improveAOIprogram">Poprawa programu AOI</option>
 										</select>
 									</div>
 								</div>
@@ -86,10 +86,10 @@
 										<textarea class="form-control" rows="5" id="comment"></textarea>
 									</div>
 								</div>
-
-								<div class="row" id="input"></div>
-								<input class="btn btn-lg btn-success btn-block" type="submit"
-									value="Start">
+								
+								<a href="<c:url value="/startRegistration"/>" 
+									class="btn btn-lg btn-success btn-block">Start</a>
+																
 							</fieldset>
 
 						</form>
