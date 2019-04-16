@@ -95,13 +95,18 @@
 												Rodzaj czynności: <select class="form-control"
 													name="activityType">
 													<c:choose>
-														<c:when test="${activity.activityType == 'poprawa programu AOI'}">
-															<option value="pisanie programu AOI">pisanie programu AOI</option>
-															<option selected value="poprawa programu AOI">poprawa programu AOI</option>
+														<c:when
+															test="${activity.activityType == 'poprawa programu AOI'}">
+															<option value="pisanie programu AOI">pisanie
+																programu AOI</option>
+															<option selected value="poprawa programu AOI">poprawa
+																programu AOI</option>
 														</c:when>
 														<c:otherwise>
-															<option value="pisanie programu AOI">pisanie programu AOI</option>
-															<option value="poprawa programu AOI">poprawa programu AOI</option>
+															<option value="pisanie programu AOI">pisanie
+																programu AOI</option>
+															<option value="poprawa programu AOI">poprawa
+																programu AOI</option>
 														</c:otherwise>
 													</c:choose>
 												</select>

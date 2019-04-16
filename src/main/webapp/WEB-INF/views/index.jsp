@@ -76,8 +76,10 @@
 										<div class="col-md-8">
 											Rodzaj czynności: <select class="form-control"
 												name="activityType">
-												<option value="pisanie programu AOI">pisanie programu AOI</option>
-												<option value="poprawa programu AOI">poprawa programu AOI</option>
+												<option value="pisanie programu AOI">pisanie
+													programu AOI</option>
+												<option value="poprawa programu AOI">poprawa
+													programu AOI</option>
 											</select>
 										</div>
 									</div>
