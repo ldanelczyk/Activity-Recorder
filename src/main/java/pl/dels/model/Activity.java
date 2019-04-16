@@ -14,6 +14,10 @@ import javax.persistence.Table;
 
 import pl.dels.model.User;
 
+/**
+ * @author danelczykl
+ *
+ */
 @Entity
 @Table(name = "activities")
 public class Activity implements Serializable {
@@ -38,7 +42,7 @@ public class Activity implements Serializable {
 	@Column(nullable = false, name = "stop_date_time")
 	private Timestamp stopDateTime;
 	@Column(nullable = false)
-	private int downtime;
+	private double downtime;
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -48,7 +52,7 @@ public class Activity implements Serializable {
 	}
 
 	public Activity(String machineNumber, String workOrder, String side, String activityType, String comments,
-			Timestamp startDateTime, Timestamp stopDateTime, int downtime) {
+			Timestamp startDateTime, Timestamp stopDateTime, double downtime) {
 		this.machineNumber = machineNumber;
 		this.workOrder = workOrder;
 		this.side = side;
@@ -57,6 +61,13 @@ public class Activity implements Serializable {
 		this.startDateTime = startDateTime;
 		this.stopDateTime = stopDateTime;
 		this.downtime = downtime;
+	}
+	
+	public Activity(String machineNumber, String workOrder, String side, String activityType) {	
+		this.machineNumber = machineNumber;
+		this.workOrder = workOrder;
+		this.side = side;
+		this.activityType = activityType;
 	}
 
 	public Long getId() {
@@ -123,11 +134,11 @@ public class Activity implements Serializable {
 		this.stopDateTime = stopDateTime;
 	}
 
-	public int getDowntime() {
+	public double getDowntime() {
 		return downtime;
 	}
 
-	public void setDowntime(int downtime) {
+	public void setDowntime(double downtime) {
 		this.downtime = downtime;
 	}
 
@@ -149,7 +160,9 @@ public class Activity implements Serializable {
 		int result = 1;
 		result = prime * result + ((activityType == null) ? 0 : activityType.hashCode());
 		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
-		result = prime * result + downtime;
+		long temp;
+		temp = Double.doubleToLongBits(downtime);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((machineNumber == null) ? 0 : machineNumber.hashCode());
 		result = prime * result + ((side == null) ? 0 : side.hashCode());
@@ -179,7 +192,7 @@ public class Activity implements Serializable {
 				return false;
 		} else if (!comments.equals(other.comments))
 			return false;
-		if (downtime != other.downtime)
+		if (Double.doubleToLongBits(downtime) != Double.doubleToLongBits(other.downtime))
 			return false;
 		if (id == null) {
 			if (other.id != null)
