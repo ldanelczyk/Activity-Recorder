@@ -29,6 +29,7 @@
 					alt="sil">
 			</div>
 		</div>
+
 		<div class="col-md-2 col-md-offset-6">
 			<div class="container">
 				<img src="resources/css/images/tst.jpg" class="img-thumbnail"
@@ -48,50 +49,53 @@
 					</div>
 					<div class="panel-body">
 						<form class="form-signin" method="post"
-							action="${pageContext.request.contextPath}/stopRegistration">
-
+							action="${pageContext.request.contextPath}/startRegistration">
 							<fieldset>
 								<div class="row" id="input">
-									<div class="col-md-4">
-										Nr linii: <select class="form-control">
-											<option value="top">AOI1</option>
-											<option value="bot">AOI2</option>
-										</select>
-									</div>
-									<div class="col-md-4" id="WoTextField">
-										Numer ZR: <input name="zrNumber" class="form-control" required
-											autofocus type="text">
+									<div class="form-group required">
+										<div class="col-md-4">
+											Nr linii: <select class="form-control" name="machineNumber">
+												<option value="AOI1">AOI1</option>
+												<option value="AOI2">AOI2</option>
+											</select>
+										</div>
+										<div class="col-md-4" id="WoTextField">
+											Numer ZR: <input class="form-control" name="workOrder"
+												required autofocus type="text">
+										</div>
 									</div>
 								</div>
-
 								<div class="row" id="input">
-									<div class="col-md-4">
-										Strona: <select class="form-control">
-											<option value="top">TOP</option>
-											<option value="bot">BOT</option>
-										</select>
-									</div>
-
-									<div class="col-md-8">
-										Typ operacji: <select class="form-control">
-											<option value="writeAOIprogram">Pisanie programu AOI</option>
-											<option value="improveAOIprogram">Poprawa programu AOI</option>
-										</select>
-									</div>
-								</div>
-
-								<div class="row" id="input">
-									<div class="col-md-12">
-										Uwagi:
-										<textarea class="form-control" rows="5" id="comment"></textarea>
+									<div class="form-group required">
+										<div class="col-md-4">
+											Strona: <select class="form-control" name="side">
+												<option value="TOP">TOP</option>
+												<option value="BOT">BOT</option>
+											</select>
+										</div>
+										<div class="col-md-8">
+											Rodzaj czynności: <select class="form-control"
+												name="activityType">
+												<option value="pisanie programu AOI">pisanie programu AOI</option>
+												<option value="poprawa programu AOI">poprawa programu AOI</option>
+											</select>
+										</div>
 									</div>
 								</div>
-								
-								<a href="<c:url value="/startRegistration"/>" 
-									class="btn btn-lg btn-success btn-block">Start</a>
-																
+								<div class="row" id="input2">
+									<div class="form-group required">
+										<div class="col-md-12">
+											Uwagi:
+											<textarea class="form-control" name="comments" rows="5"
+												id="comment"></textarea>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<input class="btn btn-lg btn-success btn-block" type="submit"
+										value="Start">
+								</div>
 							</fieldset>
-
 						</form>
 					</div>
 				</div>
@@ -101,6 +105,7 @@
 
 	<jsp:include page="fragment/footer.jsp" />
 
+	<script src="resources/js/stopwatch.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	<script src="resources/js/bootstrap.js"></script>

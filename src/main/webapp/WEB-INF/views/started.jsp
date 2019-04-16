@@ -50,54 +50,82 @@
 					<div class="panel-body">
 						<form class="form-signin" method="post"
 							action="${pageContext.request.contextPath}/stopRegistration">
-
 							<fieldset>
-								<div class="row" id="input">
-									<div class="col-md-4">
-										Nr linii: <select class="form-control">
-											<option value="top">AOI1</option>
-											<option value="bot">AOI2</option>
-										</select>
+								<c:if test="${not empty activity}">
+									<div class="row" id="input">
+										<div class="form-group required">
+											<div class="col-md-4">
+												Nr linii: <select class="form-control" name="machineNumber">
+													<c:choose>
+														<c:when test="${activity.machineNumber == 'AOI2'}">
+															<option value="AOI1">AOI1</option>
+															<option selected value="AOI2">AOI2</option>
+														</c:when>
+														<c:otherwise>
+															<option value="AOI1">AOI1</option>
+															<option value="AOI2">AOI2</option>
+														</c:otherwise>
+													</c:choose>
+												</select>
+											</div>
+											<div class="col-md-4" id="WoTextField">
+												Numer ZR: <input class="form-control" name="workOrder"
+													required autofocus type="text" c:out
+													value="${activity.workOrder}">
+											</div>
+										</div>
 									</div>
-									<div class="col-md-4" id="WoTextField">
-										Numer ZR: <input name="zrNumber" class="form-control" required
-											autofocus type="text">
+									<div class="row" id="input">
+										<div class="form-group required">
+											<div class="col-md-4">
+												Strona: <select class="form-control" name="side">
+													<c:choose>
+														<c:when test="${activity.side == 'BOT'}">
+															<option value="TOP">TOP</option>
+															<option selected value="BOT">BOT</option>
+														</c:when>
+														<c:otherwise>
+															<option value="TOP">TOP</option>
+															<option value="BOT">BOT</option>
+														</c:otherwise>
+													</c:choose>
+												</select>
+											</div>
+											<div class="col-md-8">
+												Rodzaj czynności: <select class="form-control"
+													name="activityType">
+													<c:choose>
+														<c:when test="${activity.activityType == 'poprawa programu AOI'}">
+															<option value="pisanie programu AOI">pisanie programu AOI</option>
+															<option selected value="poprawa programu AOI">poprawa programu AOI</option>
+														</c:when>
+														<c:otherwise>
+															<option value="pisanie programu AOI">pisanie programu AOI</option>
+															<option value="poprawa programu AOI">poprawa programu AOI</option>
+														</c:otherwise>
+													</c:choose>
+												</select>
+											</div>
+										</div>
 									</div>
-								</div>
-
-								<div class="row" id="input">
-									<div class="col-md-4">
-										Strona: <select class="form-control">
-											<option value="top">TOP</option>
-											<option value="bot">BOT</option>
-										</select>
+									<div class="row">
+										<div class="form-group required">
+											<div class="col-md-12">
+												Uwagi:
+												<textarea class="form-control" name="comments" rows="5"
+													id="comment"></textarea>
+											</div>
+										</div>
 									</div>
 
-									<div class="col-md-8">
-										Typ operacji: <select class="form-control">
-											<option value="writeAOIprogram">Pisanie programu AOI</option>
-											<option value="improveAOIprogram">Poprawa programu
-												AOI</option>
-										</select>
-									</div>
-								</div>
+									<h2 align="center">
+										<time>00:00:00</time>
+									</h2>
 
-								<div class="row" id="input2">
-									<div class="col-md-12">
-										Uwagi:
-										<textarea class="form-control" rows="5" id="comment"></textarea>
-									</div>
-								</div>
-
-								<h2 align="center">
-									<time>00:00:00</time>
-								</h2>
-
-								<input class="btn btn-lg btn-danger btn-block" type="submit"
-									value="Stop">
-
+									<input class="btn btn-lg btn-danger btn-block" type="submit"
+										value="Stop">
+								</c:if>
 							</fieldset>
-
 						</form>
 					</div>
 				</div>
