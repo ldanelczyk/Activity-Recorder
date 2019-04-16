@@ -1,8 +1,10 @@
 var h2 = document.getElementsByTagName('h2')[0], seconds = 0, minutes = 0, hours = 0, t;
 
-/*var h2 = document.getElementsByTagName('h2')[0], start = document
-.getElementById('start'), stop = document.getElementById('stop'), clear = document
-.getElementById('clear'), seconds = 0, minutes = 0, hours = 0, t;*/
+/*
+ * var h2 = document.getElementsByTagName('h2')[0], start = document
+ * .getElementById('start'), stop = document.getElementById('stop'), clear =
+ * document .getElementById('clear'), seconds = 0, minutes = 0, hours = 0, t;
+ */
 
 function add() {
 	seconds++;
@@ -28,18 +30,11 @@ function timer() {
 
 timer();
 
-/* Start button 
-start.onclick = timer;
-
- Stop button 
-stop.onclick = function() {
-	clearTimeout(t);
-}
-
- Clear button 
-clear.onclick = function() {
-	h1.textContent = "00:00:00";
-	seconds = 0;
-	minutes = 0;
-	hours = 0;
-}*/
+/*
+ * Start button start.onclick = timer;
+ * 
+ * Stop button stop.onclick = function() { clearTimeout(t); }
+ * 
+ * Clear button clear.onclick = function() { h1.textContent = "00:00:00";
+ * seconds = 0; minutes = 0; hours = 0; }
+ */
