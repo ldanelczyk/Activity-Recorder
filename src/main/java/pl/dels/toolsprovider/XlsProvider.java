@@ -1,6 +1,5 @@
 package pl.dels.toolsprovider;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -9,17 +8,29 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import pl.dels.model.Activity;
+import pl.dels.service.ActivityRecorderService;
 
+@Service
 public class XlsProvider {
 
-	//method that generates excel file from passed data
-	public  static void generateExcelFile() throws IOException {
+	private static ActivityRecorderService activityRecorderService;
+
+	@Autowired
+	private void setPostService(ActivityRecorderService activityRecorderService) {
+		XlsProvider.activityRecorderService = activityRecorderService;
+	}
+
+	// method that generates excel file from passed data
+	public void generateExcelFile() throws IOException {
 
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet sheet = workbook.createSheet("RAPORT");
-		Object[][] datatypes = {{"Nr linii", "ZR", "STRONA", "Czynność", "Uwagi", "Data od", "Data do", "Czas", "Inżynier AOI"}};
+		Object[][] datatypes = {
+				{ "Nr linii", "ZR", "STRONA", "Czynność", "Uwagi", "Data od", "Data do", "Czas", "Inżynier AOI" } };
 
 		int rowNum = 0;
 
@@ -38,34 +49,33 @@ public class XlsProvider {
 			}
 		}
 
-		/*int rowNum2 = 19;
+		List<Activity> activities = activityRecorderService
+				.getAllActivities((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
 
-		for (Activity objects : listOfActivities) {
+		int rowNum2 = 1;
+
+		for (Activity objects : activities) {
 
 			Row row = sheet.createRow(rowNum2++);
-			row.createCell(0).setCellValue("");
-			row.createCell(1).setCellValue("");
-			row.createCell(2).setCellValue("");
-			row.createCell(3).setCellValue(objects.getDate());
-			row.createCell(4).setCellValue(objects.getAoiNumber());
-			row.createCell(5).setCellValue(objects.getLotNumber());
-			row.createCell(6).setCellValue(objects.getAoiProgramName());
-			row.createCell(7).setCellValue(objects.getPcbSide());
-			row.createCell(8).setCellValue(objects.getDefectType());
-			row.createCell(9).setCellValue(objects.getDesignator());
-			row.createCell(10).setCellValue(objects.getCounterOfDefectType());
-			row.createCell(11).setCellValue(objects.getPartNumber());
-			row.createCell(12).setCellValue(objects.getPackageType());
-		}*/
 
-		for (int i = 0; i < 30; i++) {
+			row.createCell(0).setCellValue(objects.getMachineNumber());
+			row.createCell(1).setCellValue(objects.getWorkOrder());
+			row.createCell(2).setCellValue(objects.getSide());
+			row.createCell(3).setCellValue(objects.getActivityType());
+			row.createCell(4).setCellValue(objects.getComments());
+			row.createCell(5).setCellValue(objects.getStartDateTime());
+			row.createCell(6).setCellValue(objects.getStopDateTime());
+			row.createCell(7).setCellValue(objects.getDowntime());
+			row.createCell(8).setCellValue(objects.getUser().getUsername());
+		}
+
+		for (int i = 0; i < 9; i++) {
 
 			sheet.autoSizeColumn(i);
 		}
 
-			FileOutputStream outputStream = new FileOutputStream(
-					"C:\\Users\\danelczykl\\Desktop\\test.xlsx");
-			workbook.write(outputStream);
-			workbook.close();
+		FileOutputStream outputStream = new FileOutputStream("C:\\Users\\danelczykl\\Desktop\\test.xlsx");
+		workbook.write(outputStream);
+		workbook.close();
 	}
 }
