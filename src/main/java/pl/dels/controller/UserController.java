@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -16,11 +17,18 @@ import pl.dels.toolsprovider.XlsProvider;
 @Controller
 public class UserController {
 
+	private XlsProvider xlsProvider;
+
+	@Autowired
+	public void setXlsProvider(XlsProvider xlsProvider) {
+		this.xlsProvider = xlsProvider;
+	}
+
 	@GetMapping("/login")
 	private String login() throws IOException {
-		
-		XlsProvider.generateExcelFile();
-	
+
+		xlsProvider.generateExcelFile();
+
 		return "login";
 	}
 
