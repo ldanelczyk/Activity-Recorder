@@ -3,7 +3,9 @@ package pl.dels.service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +50,14 @@ public class ActivityRecorderService {
 		User user = userRepository.findByUsername(nameOfLoggedUser);
 		activity.setUser(user);
 		activityRepository.save(activity);
+	}
+
+	public List<Activity> getAllActivities(Comparator<Activity> comparator) {
+		List<Activity> activities = activityRepository.findAll();
+		if (comparator != null && activities != null) {
+			activities.sort(comparator);
+		}
+		return activities;
 	}
 
 	public Activity createTempActivity(String machineNumber, String workOrder, String side, String activityType) {
