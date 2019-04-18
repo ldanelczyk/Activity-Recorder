@@ -62,8 +62,8 @@ public class Activity implements Serializable {
 		this.stopDateTime = stopDateTime;
 		this.downtime = downtime;
 	}
-	
-	public Activity(String machineNumber, String workOrder, String side, String activityType) {	
+
+	public Activity(String machineNumber, String workOrder, String side, String activityType) {
 		this.machineNumber = machineNumber;
 		this.workOrder = workOrder;
 		this.side = side;
