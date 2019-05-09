@@ -6,7 +6,6 @@ html {
 }
 
 body {
-	margin-bottom: 60px;
 	padding-top: 65px;
 }
 
@@ -21,7 +20,7 @@ body {
 
 #LogContainer {
 	padding-top: 100px;
-	padding-bottom: 190px;
+	padding-bottom: 170px;
 }
 
 #LogContainer h3 {
@@ -30,7 +29,7 @@ body {
 
 #RegContainer {
 	padding-top: 50px;
-	padding-bottom: 70px;
+	padding-bottom: 30px;
 }
 
 #input {
@@ -84,5 +83,11 @@ body {
 
 .centered {
 	margin: 0 auto;
+}
+
+#myFooter {
+	position: relative;
+	bottom: -50px;
+	width: 100%;
 }
 }
