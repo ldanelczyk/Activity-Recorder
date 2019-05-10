@@ -1,6 +1,7 @@
 package pl.dels.controller;
 
 import java.sql.Timestamp;
+
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import pl.dels.model.Activity;
-import pl.dels.model.User;
-import pl.dels.repository.UserRepository;
 import pl.dels.service.ActivityRecorderService;
 
 @Controller
