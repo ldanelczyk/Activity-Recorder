@@ -12,12 +12,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import pl.dels.model.User;
 
 /**
  * @author danelczykl
  *
  */
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "activities")
 public class Activity implements Serializable {
@@ -46,196 +55,4 @@ public class Activity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-
-	public Activity() {
-
-	}
-
-	public Activity(String machineNumber, String workOrder, String side, String activityType, String comments,
-			Timestamp startDateTime, Timestamp stopDateTime, double downtime) {
-		this.machineNumber = machineNumber;
-		this.workOrder = workOrder;
-		this.side = side;
-		this.activityType = activityType;
-		this.comments = comments;
-		this.startDateTime = startDateTime;
-		this.stopDateTime = stopDateTime;
-		this.downtime = downtime;
-	}
-
-	public Activity(String machineNumber, String workOrder, String side, String activityType) {
-		this.machineNumber = machineNumber;
-		this.workOrder = workOrder;
-		this.side = side;
-		this.activityType = activityType;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getMachineNumber() {
-		return machineNumber;
-	}
-
-	public void setMachineNumber(String machineNumber) {
-		this.machineNumber = machineNumber;
-	}
-
-	public String getWorkOrder() {
-		return workOrder;
-	}
-
-	public void setWorkOrder(String workOrder) {
-		this.workOrder = workOrder;
-	}
-
-	public String getSide() {
-		return side;
-	}
-
-	public void setSide(String side) {
-		this.side = side;
-	}
-
-	public String getActivityType() {
-		return activityType;
-	}
-
-	public void setActivityType(String activityType) {
-		this.activityType = activityType;
-	}
-
-	public String getComments() {
-		return comments;
-	}
-
-	public void setComments(String comments) {
-		this.comments = comments;
-	}
-
-	public Timestamp getStartDateTime() {
-		return startDateTime;
-	}
-
-	public void setStartDateTime(Timestamp startDateTime) {
-		this.startDateTime = startDateTime;
-	}
-
-	public Timestamp getStopDateTime() {
-		return stopDateTime;
-	}
-
-	public void setStopDateTime(Timestamp stopDateTime) {
-		this.stopDateTime = stopDateTime;
-	}
-
-	public double getDowntime() {
-		return downtime;
-	}
-
-	public void setDowntime(double downtime) {
-		this.downtime = downtime;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((activityType == null) ? 0 : activityType.hashCode());
-		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(downtime);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((machineNumber == null) ? 0 : machineNumber.hashCode());
-		result = prime * result + ((side == null) ? 0 : side.hashCode());
-		result = prime * result + ((startDateTime == null) ? 0 : startDateTime.hashCode());
-		result = prime * result + ((stopDateTime == null) ? 0 : stopDateTime.hashCode());
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
-		result = prime * result + ((workOrder == null) ? 0 : workOrder.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Activity other = (Activity) obj;
-		if (activityType == null) {
-			if (other.activityType != null)
-				return false;
-		} else if (!activityType.equals(other.activityType))
-			return false;
-		if (comments == null) {
-			if (other.comments != null)
-				return false;
-		} else if (!comments.equals(other.comments))
-			return false;
-		if (Double.doubleToLongBits(downtime) != Double.doubleToLongBits(other.downtime))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (machineNumber == null) {
-			if (other.machineNumber != null)
-				return false;
-		} else if (!machineNumber.equals(other.machineNumber))
-			return false;
-		if (side == null) {
-			if (other.side != null)
-				return false;
-		} else if (!side.equals(other.side))
-			return false;
-		if (startDateTime == null) {
-			if (other.startDateTime != null)
-				return false;
-		} else if (!startDateTime.equals(other.startDateTime))
-			return false;
-		if (stopDateTime == null) {
-			if (other.stopDateTime != null)
-				return false;
-		} else if (!stopDateTime.equals(other.stopDateTime))
-			return false;
-		if (user == null) {
-			if (other.user != null)
-				return false;
-		} else if (!user.equals(other.user))
-			return false;
-		if (workOrder == null) {
-			if (other.workOrder != null)
-				return false;
-		} else if (!workOrder.equals(other.workOrder))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Activity [id=" + id + ", machineNumber=" + machineNumber + ", workOrder=" + workOrder + ", side=" + side
-				+ ", activityType=" + activityType + ", comments=" + comments + ", startDateTime=" + startDateTime
-				+ ", stopDateTime=" + stopDateTime + ", downtime=" + downtime + ", user=" + user + "]";
-	}
 }
