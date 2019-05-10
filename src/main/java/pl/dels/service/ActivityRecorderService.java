@@ -1,8 +1,10 @@
 package pl.dels.service;
 
 import java.sql.Timestamp;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -44,9 +46,17 @@ public class ActivityRecorderService {
 			String comments, Timestamp startDateTime, Timestamp stopDateTime, double downtime,
 			String nameOfLoggedUser) {
 
-		Activity activity = new Activity(machineNumber, workOrder, side, activityType, comments, startDateTime,
-				stopDateTime, downtime);
-
+		Activity activity = Activity.builder()
+				.machineNumber(machineNumber)
+				.workOrder(workOrder)
+				.side(side)
+				.activityType(activityType)
+				.comments(comments)
+				.startDateTime(startDateTime)
+				.stopDateTime(stopDateTime)
+				.downtime(downtime)
+				.build();
+				
 		User user = userRepository.findByUsername(nameOfLoggedUser);
 		activity.setUser(user);
 		activityRepository.save(activity);
@@ -62,7 +72,12 @@ public class ActivityRecorderService {
 
 	public Activity createTempActivity(String machineNumber, String workOrder, String side, String activityType) {
 
-		Activity activity = new Activity(machineNumber, workOrder, side, activityType);
+		Activity activity = Activity.builder()
+							.machineNumber(machineNumber)
+							.workOrder(workOrder)
+							.side(side)
+							.activityType(activityType)
+							.build();
 
 		return activity;
 	}
