@@ -17,8 +17,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
@@ -36,10 +38,6 @@ public class User implements Serializable {
 	private Set<Role> roles = new HashSet<>();
 	@OneToMany(mappedBy = "user")
 	private List<Activity> activities;
-
-	public User() {
-
-	}
 
 	public User(String username, String password) {
 		this.username = username;
