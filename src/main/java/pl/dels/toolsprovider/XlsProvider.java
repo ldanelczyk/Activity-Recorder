@@ -12,15 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pl.dels.model.Activity;
-import pl.dels.service.ActivityRecorderService;
+import pl.dels.service.ActivityService;
 
 @Service
 public class XlsProvider {
 
-	private static ActivityRecorderService activityRecorderService;
+	private static ActivityService activityRecorderService;
 
 	@Autowired
-	private void setPostService(ActivityRecorderService activityRecorderService) {
+	private void setPostService(ActivityService activityRecorderService) {
 		XlsProvider.activityRecorderService = activityRecorderService;
 	}
 
