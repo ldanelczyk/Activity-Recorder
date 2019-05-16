@@ -18,13 +18,11 @@ import pl.dels.repository.ActivityRepository;
 import pl.dels.repository.UserRepository;
 
 @Service
-public class ActivityRecorderService {
+public class ActivityService {
 
 	private ActivityRepository activityRepository;
 
 	private UserRepository userRepository;
-
-	private Timestamp startDateTime;
 
 	private final double DIVIDER_OF_SECONDS = 1000000000;
 
@@ -95,13 +93,5 @@ public class ActivityRecorderService {
 		double downtimeInHour = Math.floor(downtime * ROUND_CONSTANCE) / ROUND_CONSTANCE;
 
 		return downtimeInHour;
-	}
-
-	public Timestamp getStartDateTime() {
-		return startDateTime;
-	}
-
-	public void setStartDateTime() {
-		this.startDateTime = new Timestamp(new Date().getTime());
 	}
 }

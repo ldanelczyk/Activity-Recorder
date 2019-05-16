@@ -13,15 +13,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import pl.dels.model.Activity;
-import pl.dels.service.ActivityRecorderService;
+import pl.dels.service.ActivityService;
 
 @Controller
-public class ActivityRecorderController {
+public class ActivityController {
 
-	private ActivityRecorderService activityRecorderService;
+	private ActivityService activityRecorderService;
+	
+	private Timestamp startDateTime;
 
 	@Autowired
-	private void setPostService(ActivityRecorderService activityRecorderService) {
+	private void setPostService(ActivityService activityRecorderService) {
 		this.activityRecorderService = activityRecorderService;
 	}
 
@@ -29,7 +31,7 @@ public class ActivityRecorderController {
 	private String startRegistration(@RequestParam String machineNumber, @RequestParam String workOrder,
 			@RequestParam String side, @RequestParam String activityType, Model model) {
 
-		activityRecorderService.setStartDateTime();
+		startDateTime = new Timestamp(new Date().getTime());
 
 		Activity activity = activityRecorderService.createTempActivity(machineNumber, workOrder, side, activityType);
 
@@ -43,8 +45,6 @@ public class ActivityRecorderController {
 			@RequestParam String side, @RequestParam String activityType, @RequestParam String comments) {
 
 		String nameOfLoggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
-
-		Timestamp startDateTime = activityRecorderService.getStartDateTime();
 
 		Timestamp stopDateTime = new Timestamp(new Date().getTime());
 
