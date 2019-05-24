@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,8 @@ import pl.dels.service.ActivityService;
 @Service
 public class XlsProvider {
 
-	private static ActivityService activityRecorderService;
-
 	@Autowired
-	private void setPostService(ActivityService activityRecorderService) {
-		XlsProvider.activityRecorderService = activityRecorderService;
-	}
+	private ActivityService activityService;
 
 	// method that generates excel file from passed data
 	public void generateExcelFile() throws IOException {
@@ -49,7 +46,7 @@ public class XlsProvider {
 			}
 		}
 
-		List<Activity> activities = activityRecorderService
+		List<Activity> activities = activityService
 				.getAllActivities((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
 
 		int rowNum2 = 1;
