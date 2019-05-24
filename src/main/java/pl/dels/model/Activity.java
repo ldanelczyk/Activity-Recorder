@@ -1,6 +1,7 @@
 package pl.dels.model;
 
 import java.io.Serializable;
+
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -16,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import pl.dels.model.User;
 
 /**
