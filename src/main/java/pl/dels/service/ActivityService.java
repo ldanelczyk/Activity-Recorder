@@ -6,41 +6,37 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import pl.dels.model.User;
 import pl.dels.model.Activity;
 import pl.dels.repository.ActivityRepository;
 import pl.dels.repository.UserRepository;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Service
 public class ActivityService {
 
+	@Autowired
 	private ActivityRepository activityRepository;
 
+	@Autowired
 	private UserRepository userRepository;
-
+	
 	private final double DIVIDER_OF_SECONDS = 1000000000;
 
 	private final double DIVIDER_OF_HOUR = 3600;
 
 	private final double ROUND_CONSTANCE = 1000;
 
-	@Autowired
-	public void setActivityRepository(ActivityRepository activityRepository) {
-		this.activityRepository = activityRepository;
-	}
-
-	@Autowired
-	public void setUserRepository(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
-
-	public void saveActivityInDatabase(String machineNumber, String workOrder, String side, String activityType,
+	public Activity saveActivityInDatabase(String machineNumber, String workOrder, String side, String activityType,
 			String comments, Timestamp startDateTime, Timestamp stopDateTime, double downtime,
 			String nameOfLoggedUser) {
 
@@ -57,7 +53,7 @@ public class ActivityService {
 				
 		User user = userRepository.findByUsername(nameOfLoggedUser);
 		activity.setUser(user);
-		activityRepository.save(activity);
+		return activityRepository.save(activity);
 	}
 
 	public List<Activity> getAllActivities(Comparator<Activity> comparator) {
@@ -76,7 +72,6 @@ public class ActivityService {
 							.side(side)
 							.activityType(activityType)
 							.build();
-
 		return activity;
 	}
 
