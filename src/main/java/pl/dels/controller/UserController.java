@@ -17,12 +17,8 @@ import pl.dels.toolsprovider.XlsProvider;
 @Controller
 public class UserController {
 
-	private XlsProvider xlsProvider;
-
 	@Autowired
-	public void setXlsProvider(XlsProvider xlsProvider) {
-		this.xlsProvider = xlsProvider;
-	}
+	private XlsProvider xlsProvider;
 
 	@GetMapping("/login")
 	private String login() throws IOException {
