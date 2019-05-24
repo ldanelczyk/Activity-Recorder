@@ -18,14 +18,10 @@ import pl.dels.service.ActivityService;
 @Controller
 public class ActivityController {
 
-	private ActivityService activityRecorderService;
+	@Autowired
+	private ActivityService activityService;
 	
 	private Timestamp startDateTime;
-
-	@Autowired
-	private void setPostService(ActivityService activityRecorderService) {
-		this.activityRecorderService = activityRecorderService;
-	}
 
 	@PostMapping("/startRegistration")
 	private String startRegistration(@RequestParam String machineNumber, @RequestParam String workOrder,
@@ -33,7 +29,7 @@ public class ActivityController {
 
 		startDateTime = new Timestamp(new Date().getTime());
 
-		Activity activity = activityRecorderService.createTempActivity(machineNumber, workOrder, side, activityType);
+		Activity activity = activityService.createTempActivity(machineNumber, workOrder, side, activityType);
 
 		model.addAttribute("activity", activity);
 
@@ -48,9 +44,9 @@ public class ActivityController {
 
 		Timestamp stopDateTime = new Timestamp(new Date().getTime());
 
-		double downtime = activityRecorderService.downtimeCounter(startDateTime, stopDateTime);
-
-		activityRecorderService.saveActivityInDatabase(machineNumber, workOrder, side, activityType, comments,
+		double downtime = activityService.downtimeCounter(startDateTime, stopDateTime);
+		
+		activityService.saveActivityInDatabase(machineNumber, workOrder, side, activityType, comments,
 				startDateTime, stopDateTime, downtime, nameOfLoggedUser);
 
 		return "redirect:addOk";
