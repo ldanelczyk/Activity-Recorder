@@ -2,6 +2,7 @@ package pl.dels.toolsprovider;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -12,9 +13,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.AllArgsConstructor;
+
 import pl.dels.model.Activity;
 import pl.dels.service.ActivityService;
 
+@AllArgsConstructor
 @Service
 public class XlsProvider {
 
@@ -22,7 +26,7 @@ public class XlsProvider {
 	private ActivityService activityService;
 
 	// method that generates excel file from passed data
-	public void generateExcelFile() throws IOException {
+	public void generateExcelFile(String path) throws IOException {
 
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet sheet = workbook.createSheet("RAPORT");
@@ -71,7 +75,7 @@ public class XlsProvider {
 			sheet.autoSizeColumn(i);
 		}
 
-		FileOutputStream outputStream = new FileOutputStream("C:\\Users\\danelczykl\\Desktop\\test.xlsx");
+		FileOutputStream outputStream = new FileOutputStream(path);
 		workbook.write(outputStream);
 		workbook.close();
 	}
