@@ -57,7 +57,9 @@ public class ActivityService {
 	}
 
 	public List<Activity> getAllActivities(Comparator<Activity> comparator) {
+		
 		List<Activity> activities = activityRepository.findAll();
+		
 		if (comparator != null && activities != null) {
 			activities.sort(comparator);
 		}
