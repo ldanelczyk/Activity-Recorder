@@ -1,16 +1,17 @@
 package pl.dels.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import java.util.HashSet;
-
 import org.junit.jupiter.api.Test;
+
 import org.mockito.ArgumentCaptor;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import pl.dels.model.Role;
