@@ -3,16 +3,20 @@ package pl.dels.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+
 import static org.mockito.BDDMockito.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Test;
+
+import org.mockito.ArgumentCaptor;
+
 import java.sql.Timestamp;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 
 import pl.dels.model.Activity;
 import pl.dels.repository.ActivityRepository;
@@ -53,22 +57,23 @@ class ActivityServiceTest {
 	void getAllActivitiesSortedWithComparator() {
 
 		//given
-		List<Activity> listWithActivities = createActivities();
+		List<Activity> createdActivityList = createActivities();
 		
 		ActivityRepository activityRepository = mock(ActivityRepository.class);
 		UserRepository userRepository = mock(UserRepository.class);
 		
 		ActivityService activityService = new ActivityService(activityRepository, userRepository);
 		
-		given(activityRepository.findAll()).willReturn(listWithActivities);
+		given(activityRepository.findAll()).willReturn(createdActivityList);
 		
 		//when
-		List<Activity> activityList = activityService.getAllActivities((a1, a2) -> a1.getWorkOrder().compareTo(a2.getWorkOrder()));
+		List<Activity> returnedActivityList = activityService.getAllActivities((a1, a2) -> a1.getWorkOrder().compareTo(a2.getWorkOrder()));
 		
 		//then
 		verify(activityRepository, times(1)).findAll();
-		assertThat(activityList, hasSize(3));
-		assertThat(activityList.get(0).getWorkOrder(), equalTo("ZRXXXX"));
+		assertThat(returnedActivityList, hasSize(3));
+		assertThat(returnedActivityList.get(0).getWorkOrder(), equalTo("ZRXXXX"));
+		assertEquals(createdActivityList, returnedActivityList);
 	}
 	
 	@Test
