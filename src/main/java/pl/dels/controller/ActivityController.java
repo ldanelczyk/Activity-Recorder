@@ -41,6 +41,8 @@ public class ActivityController {
 			@RequestParam String side, @RequestParam String activityType, @RequestParam String comments) {
 
 		String nameOfLoggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		//String nameOfLoggedUser = "ExampleUser";
 
 		Timestamp stopDateTime = new Timestamp(new Date().getTime());
 
