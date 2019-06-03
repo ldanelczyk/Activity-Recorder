@@ -6,6 +6,8 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +21,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import pl.dels.model.User;
+import pl.dels.model.enums.MachineNumber;
+import pl.dels.model.enums.Side;
 
 /**
  * @author danelczykl
@@ -38,12 +42,14 @@ public class Activity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, name = "machine_number")
-	private String machineNumber;
+	private MachineNumber machineNumber;
 	@Column(nullable = false, name = "work_order")
 	private String workOrder;
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private String side;
+	private Side side;
 	@Column(nullable = false, name = "activity_type")
 	private String activityType;
 	@Column
