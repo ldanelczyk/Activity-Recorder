@@ -59,10 +59,10 @@ public class XlsProvider {
 
 			Row row = sheet.createRow(rowNum2++);
 
-			row.createCell(0).setCellValue(objects.getMachineNumber());
+			row.createCell(0).setCellValue(String.valueOf(objects.getMachineNumber()));
 			row.createCell(1).setCellValue(objects.getWorkOrder());
-			row.createCell(2).setCellValue(objects.getSide());
-			row.createCell(3).setCellValue(objects.getActivityType());
+			row.createCell(2).setCellValue(String.valueOf(objects.getSide()));
+			row.createCell(3).setCellValue(String.valueOf(objects.getActivityType()));
 			row.createCell(4).setCellValue(objects.getComments());
 			row.createCell(5).setCellValue(objects.getStartDateTime());
 			row.createCell(6).setCellValue(objects.getStopDateTime());
