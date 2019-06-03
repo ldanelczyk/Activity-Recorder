@@ -32,6 +32,8 @@ import com.poiji.exception.PoijiExcelType;
 
 import pl.dels.model.Activity;
 import pl.dels.model.User;
+import pl.dels.model.enums.MachineNumber;
+import pl.dels.model.enums.Side;
 import pl.dels.repository.ActivityRepository;
 import pl.dels.repository.UserRepository;
 import pl.dels.service.ActivityService;
@@ -42,12 +44,7 @@ class XlsProviderTest {
 	static void removeTestFile() {
 		
 		File testedFile = new File("test.xlsx");
-		
-		boolean flag = testedFile.delete();
-		
-		System.out.println(testedFile.getAbsolutePath());
-		
-		System.out.println(flag);
+		testedFile.delete();
 	}
 
 	@Test
@@ -79,12 +76,12 @@ class XlsProviderTest {
 		for (ActivityPoiji activityPoiji : listWithRodeObjects) {
 			
 		       assertThat(activityPoiji, notNullValue());
-			   assertThat(activityPoiji.getMachineNumber(), containsString("AOI"));
-		       assertThat(activityPoiji.getMachineNumber().length(), lessThan(5));
+			   assertThat(String.valueOf(activityPoiji.getMachineNumber()), containsString("AOI"));
+		       assertThat(String.valueOf(activityPoiji.getMachineNumber()).length(), lessThan(5));
 		       assertThat(activityPoiji.getWorkOrder(), containsString("ZR"));
 		       assertThat(activityPoiji.getWorkOrder().length(), lessThan(8));
-		       assertThat(activityPoiji.getSide(), containsString("T"));
-		       assertThat(activityPoiji.getSide().length(), lessThan(4));
+		       assertThat(String.valueOf(activityPoiji.getSide()), containsString("T"));
+		       assertThat(String.valueOf(activityPoiji.getSide()).length(), lessThan(4));
 		       assertThat(activityPoiji.getActivityType(), containsString("programu"));
 		       assertThat(activityPoiji.getActivityType().length(), lessThan(21));		
 		}
@@ -108,10 +105,10 @@ class XlsProviderTest {
 		Timestamp stopDateTime = new Timestamp(new Date().getTime());
 
 		Activity activity1 = Activity.builder()
-				.machineNumber("AOI1")
+				.machineNumber(MachineNumber.AOI1)
 				.workOrder("ZRXXXX")
-				.side("TOP")
-				.activityType("Poprawa programu AOI")
+				.side(Side.TOP)
+				.activityType("poprawa programu AOI")
 				.comments("Example Comment4")
 				.startDateTime(startDateTime)
 				.stopDateTime(stopDateTime)
@@ -120,10 +117,10 @@ class XlsProviderTest {
 				.build();
 
 		Activity activity2 = Activity.builder()
-				.machineNumber("AOI2")
+				.machineNumber(MachineNumber.AOI2)
 				.workOrder("ZRXXYY")
-				.side("BOT")
-				.activityType("Poprawa programu AOI")
+				.side(Side.BOT)
+				.activityType("poprawa programu AOI")
 				.comments("Example Comment3")
 				.startDateTime(startDateTime)
 				.stopDateTime(stopDateTime)
@@ -132,10 +129,10 @@ class XlsProviderTest {
 				.build();
 
 		Activity activity3 = Activity.builder()
-				.machineNumber("AOI1")
+				.machineNumber(MachineNumber.AOI1)
 				.workOrder("ZRYYYY")
-				.side("BOT")
-				.activityType("Pisanie programu AOI")
+				.side(Side.BOT)
+				.activityType("pisanie programu AOI")
 				.comments("Example Comment5")
 				.startDateTime(startDateTime)
 				.stopDateTime(stopDateTime)

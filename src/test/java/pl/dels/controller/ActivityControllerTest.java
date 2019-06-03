@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -30,9 +30,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.sql.Timestamp;
+
 import java.util.Date;
 
 import pl.dels.model.Activity;
+import pl.dels.model.enums.MachineNumber;
+import pl.dels.model.enums.Side;
 import pl.dels.service.ActivityService;
 
 class ActivityControllerTest {
@@ -57,17 +60,17 @@ class ActivityControllerTest {
 
 		Activity createdActivity = createTempActivity();
 
-		String machineNumber = "AOI1";
+		MachineNumber machineNumber = MachineNumber.AOI1;
 		String workOrder = "ZRXXXX";
-		String side = "TOP";
-		String activityType = "Pisanie programu AOI";
+		Side side = Side.TOP;
+		String activityType = "pisanie programu AOI";
 
 		when(activityService.createTempActivity(machineNumber, workOrder, side, activityType)).thenReturn(createdActivity);
 
 		this.mockMvc.perform(post("/startRegistration").contentType(MediaType.APPLICATION_FORM_URLENCODED)
-					.param("machineNumber", machineNumber)
+					.param("machineNumber", String.valueOf(machineNumber))
 					.param("workOrder", workOrder)
-					.param("side", side)
+					.param("side", String.valueOf(side))
 					.param("activityType", activityType))
 					.andExpect(status().isOk())
 					.andExpect(view().name("started"))
@@ -92,10 +95,10 @@ class ActivityControllerTest {
 		String machineNumber = "AOI1";
 		String workOrder = "ZRXXXX";
 		String side = "TOP";
-		String activityType = "Pisanie programu AOI";
+		String activityType = "pisanie programu AOI";
 		String comments = "Example Comment2";
 		
-		when(activityService.saveActivityInDatabase("AOI2", "ZRXXYY", "BOT", "Poprawa programu AOI", "Example Comment2", startDateTime, stopDateTime, 0.001, null)).thenReturn(createdActivity);
+		when(activityService.saveActivityInDatabase(MachineNumber.AOI2, "ZRXXYY", Side.BOT, "pisanie programu AOI", "Example Comment2", startDateTime, stopDateTime, 0.001, null)).thenReturn(createdActivity);
 				
 		//when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("exampleName");
 
@@ -108,14 +111,26 @@ class ActivityControllerTest {
 				.andExpect(view().name("redirect:addOk"));
 	}
 	
+	@Test
+	public void shouldReturnAddOkPage() throws Exception {
+
+		MockitoAnnotations.initMocks(this);
+		this.mockMvc = MockMvcBuilders.standaloneSetup(activityController).build();
+
+		this.mockMvc.perform(get("/addOk"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("addSuccess"))
+				.andExpect(forwardedUrl("addSuccess"));
+	}
+	
 	private Activity createActivity() {
 		
 		Activity activity = Activity.builder()
-				.machineNumber("AOI2")
+				.machineNumber(MachineNumber.AOI2)
 				.workOrder("ZRXXYY")
-				.side("BOT")
-				.activityType("Poprawa programu AOI")
-				.comments("Example Comment2")
+				.side(Side.BOT)
+				.activityType("poprawa programu AOI")
+				.comments("Example Comment-2")
 				.startDateTime(startDateTime)
 				.stopDateTime(stopDateTime)
 				.downtime(0.001)
@@ -127,10 +142,10 @@ class ActivityControllerTest {
 	Activity createTempActivity() {
 
 		Activity activity = Activity.builder()
-				.machineNumber("AOI1")
+				.machineNumber(MachineNumber.AOI1)
 				.workOrder("ZRXXXX")
-				.side("TOP")
-				.activityType("Pisanie programu AOI").build();
+				.side(Side.TOP)
+				.activityType("pisanie programu AOI").build();
 		
 		return activity;
 	}

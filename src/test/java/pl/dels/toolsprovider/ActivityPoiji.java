@@ -20,6 +20,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.dels.model.enums.MachineNumber;
+import pl.dels.model.enums.Side;
 
 /**
  * @author danelczykl
@@ -44,13 +46,13 @@ public class ActivityPoiji implements Serializable {
 	private Long id;
 	@ExcelCell(0)
 	@Column(nullable = false, name = "machine_number")
-	private String machineNumber;
+	private MachineNumber machineNumber;
 	@ExcelCell(1)
 	@Column(nullable = false, name = "work_order")
 	private String workOrder;
 	@ExcelCell(2)
 	@Column(nullable = false)
-	private String side;
+	private Side side;
 	@ExcelCell(3)
 	@Column(nullable = false, name = "activity_type")
 	private String activityType;

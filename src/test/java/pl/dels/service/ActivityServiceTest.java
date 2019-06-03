@@ -19,6 +19,8 @@ import java.util.Date;
 import java.util.List;
 
 import pl.dels.model.Activity;
+import pl.dels.model.enums.MachineNumber;
+import pl.dels.model.enums.Side;
 import pl.dels.repository.ActivityRepository;
 import pl.dels.repository.UserRepository;
 
@@ -42,7 +44,7 @@ class ActivityServiceTest {
 		given(activityRepository.save(any(Activity.class))).willReturn(createdActivity);
 		
 		//when
-		Activity returnedActivity = activityService.saveActivityInDatabase("AOI2", "ZRXXYY", "BOT", "Poprawa programu AOI", "Example Comment2", startDateTime, stopDateTime, 0.001, null);
+		Activity returnedActivity = activityService.saveActivityInDatabase(MachineNumber.AOI2, "ZRXXYY", Side.BOT, "poprawa programu AOI", "Example Comment2", startDateTime, stopDateTime, 0.001, null);
 
 		ArgumentCaptor<Activity> activityArgument = ArgumentCaptor.forClass(Activity.class);
 	
@@ -83,7 +85,7 @@ class ActivityServiceTest {
 		ActivityService activityService = new ActivityService();
 		
 		//when
-		Activity tempActivity = activityService.createTempActivity("AOI1", "ZRXXXX", "TOP", "Pisanie programu AOI");
+		Activity tempActivity = activityService.createTempActivity(MachineNumber.AOI1, "ZRXXXX", Side.TOP, "poprawa programu AOI");
 		
 		//then
 		assertNotNull(tempActivity);
@@ -109,10 +111,10 @@ class ActivityServiceTest {
 	private Activity createActivity() {
 		
 		Activity activity = Activity.builder()
-				.machineNumber("AOI2")
+				.machineNumber(MachineNumber.AOI2)
 				.workOrder("ZRXXYY")
-				.side("BOT")
-				.activityType("Poprawa programu AOI")
+				.side(Side.BOT)
+				.activityType("poprawa programu AOI")
 				.comments("Example Comment2")
 				.startDateTime(startDateTime)
 				.stopDateTime(stopDateTime)
@@ -125,10 +127,10 @@ class ActivityServiceTest {
 	private List<Activity> createActivities() {
 		
 		Activity activity1 = Activity.builder()
-				.machineNumber("AOI1")
+				.machineNumber(MachineNumber.AOI1)
 				.workOrder("ZRXXXX")
-				.side("TOP")
-				.activityType("Poprawa programu AOI")
+				.side(Side.TOP)
+				.activityType("poprawa programu AOI")
 				.comments("Example Comment4")
 				.startDateTime(startDateTime)
 				.stopDateTime(stopDateTime)
@@ -136,10 +138,10 @@ class ActivityServiceTest {
 				.build();
 		
 		Activity activity2 = Activity.builder()
-				.machineNumber("AOI2")
+				.machineNumber(MachineNumber.AOI2)
 				.workOrder("ZRXXYY")
-				.side("BOT")
-				.activityType("Poprawa programu AOI")
+				.side(Side.BOT)
+				.activityType("poprawa programu AOI")
 				.comments("Example Comment3")
 				.startDateTime(startDateTime)
 				.stopDateTime(stopDateTime)
@@ -147,10 +149,10 @@ class ActivityServiceTest {
 				.build();
 		
 		Activity activity3 = Activity.builder()
-				.machineNumber("AOI1")
+				.machineNumber(MachineNumber.AOI2)
 				.workOrder("ZRYYYY")
-				.side("BOT")
-				.activityType("Pisanie programu AOI")
+				.side(Side.BOT)
+				.activityType("pisanie programu AOI")
 				.comments("Example Comment5")
 				.startDateTime(startDateTime)
 				.stopDateTime(stopDateTime)
