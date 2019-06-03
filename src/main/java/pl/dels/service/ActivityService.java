@@ -15,6 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import pl.dels.model.User;
+import pl.dels.model.enums.MachineNumber;
+import pl.dels.model.enums.Side;
 import pl.dels.model.Activity;
 import pl.dels.repository.ActivityRepository;
 import pl.dels.repository.UserRepository;
@@ -36,7 +38,7 @@ public class ActivityService {
 
 	private final double ROUND_CONSTANCE = 1000;
 
-	public Activity saveActivityInDatabase(String machineNumber, String workOrder, String side, String activityType,
+	public Activity saveActivityInDatabase(MachineNumber machineNumber, String workOrder, Side side, String activityType,
 			String comments, Timestamp startDateTime, Timestamp stopDateTime, double downtime,
 			String nameOfLoggedUser) {
 
@@ -53,7 +55,8 @@ public class ActivityService {
 				
 		User user = userRepository.findByUsername(nameOfLoggedUser);
 		activity.setUser(user);
-		return activityRepository.save(activity);
+		
+		return activityRepository.save(activity);		
 	}
 
 	public List<Activity> getAllActivities(Comparator<Activity> comparator) {
@@ -66,7 +69,7 @@ public class ActivityService {
 		return activities;
 	}
 
-	public Activity createTempActivity(String machineNumber, String workOrder, String side, String activityType) {
+	public Activity createTempActivity(MachineNumber machineNumber, String workOrder, Side side, String activityType) {
 
 		Activity activity = Activity.builder()
 							.machineNumber(machineNumber)
