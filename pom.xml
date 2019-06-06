@@ -24,6 +24,14 @@
 		<java.version>10</java.version>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>com.gembox</id>
+			<name>GemBox API</name>
+			<url>https://gemboxsoftware.com/repo/</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -150,6 +158,16 @@
 			<groupId>com.github.ozlerhakan</groupId>
 			<artifactId>poiji</artifactId>
 			<version>1.20.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.gembox</groupId>
+			<artifactId>gembox-spreadsheet</artifactId>
+			<version>1.1.1062</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.taglibs</groupId>
+			<artifactId>taglibs-standard-impl</artifactId>
+			<version>1.2.5</version>
 		</dependency>
 	</dependencies>
 
