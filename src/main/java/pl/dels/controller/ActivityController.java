@@ -60,7 +60,8 @@ public class ActivityController {
 		
 		try {
 			
-			xlsProvider.generateExcelFile("C:\\Users\\danelczykl\\Desktop\\test.xlsx");
+			xlsProvider.generateExcelFileWithAllDataFromDb("C:\\Users\\danelczykl\\Desktop\\Raport_czynnosci.xlsx");
+			xlsProvider.generateExcelFileWithChartFromAGivenWeek();
 			
 		} catch (IOException e) {
 			

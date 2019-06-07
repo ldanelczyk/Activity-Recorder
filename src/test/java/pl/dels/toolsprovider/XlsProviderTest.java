@@ -48,7 +48,7 @@ class XlsProviderTest {
 	}
 
 	@Test
-	void prepareFile() throws IOException {
+	void testExcelGenerator() throws IOException {
 
 		// given
 		List<Activity> listWithPreparedActivities = createActivities();
@@ -64,7 +64,7 @@ class XlsProviderTest {
 				.willReturn(listWithPreparedActivities);
 
 		// when
-		xlsProvider.generateExcelFile("test.xlsx");
+		xlsProvider.generateExcelFileWithAllDataFromDb("test.xlsx");
 
 		List<ActivityPoiji> listWithRodeObjects = readDataFromCreatedExcelFile();
 
