@@ -96,7 +96,7 @@ public class XlsProvider {
 		workbook.close();
 	}
 
-	public void generateExcelFileWithChartFromAGivenWeek() throws IOException {
+	public void generateExcelFileWithChartFromAGivenWeek() throws IOException, ClassNotFoundException {
 
 		SpreadsheetInfo.setLicense("FREE-LIMITED-KEY");
 

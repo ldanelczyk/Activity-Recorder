@@ -6,5 +6,5 @@ import pl.dels.model.ChartActivity;
 
 public interface ChartActivityDao {
 
-	List<ChartActivity> getAllActivities();
+	List<ChartActivity> getAllActivities() throws ClassNotFoundException;
 }
