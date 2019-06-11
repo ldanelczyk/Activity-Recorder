@@ -21,6 +21,7 @@ import lombok.AllArgsConstructor;
 import com.gembox.spreadsheet.*;
 import com.gembox.spreadsheet.charts.*;
 
+import pl.dels.database.dao.ChartActivityDaoImpl;
 import pl.dels.model.Activity;
 import pl.dels.model.ChartActivity;
 import pl.dels.service.ActivityService;
@@ -102,25 +103,32 @@ public class XlsProvider {
 		ExcelFile workbook = new ExcelFile();
 		ExcelWorksheet worksheet = workbook.addWorksheet("Porownanie");
 
-		List<Activity> activities = activityService
+		List<Activity> aoiActivities = activityService
 				.getAllActivities((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
 
-		List<ChartActivity> chartActivityListAll = activities.stream()
-													.map(activity -> new ChartActivity(
-													activity.getWorkOrder(),
-													activities.stream()
-													.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
-													.mapToDouble(activityWO -> activityWO.getDowntime())
-													.sum()))
+		List<ChartActivity> chartActivityAoiList = aoiActivities.stream()
+													.map(activity -> new ChartActivity(activity.getWorkOrder(),aoiActivities.stream()
+															.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
+															.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
 													.distinct().collect(Collectors.toList());
 
-		ExcelChart chart = worksheet.getCharts().add(ChartType.BAR, "F2", "M25");
-		chart.selectData(worksheet.getCells().getSubrangeAbsolute(0, 0, chartActivityListAll.size(), 2), true);
+		ChartActivityDaoImpl chartActivityDao = new ChartActivityDaoImpl();
 
-		for (int i = 0; i < chartActivityListAll.size(); i++) {
-			worksheet.getCell(i + 1, 0).setValue(chartActivityListAll.get(i).getWorkOrder());
-			worksheet.getCell(i + 1, 1).setValue(chartActivityListAll.get(i).getDowntime());
-			worksheet.getCell(i + 1, 2).setValue(2);
+		List<ChartActivity> kronosActivities = chartActivityDao.getAllActivities();
+
+		List<ChartActivity> chartActivityKronosList = kronosActivities.stream()
+														.map(activity -> new ChartActivity(activity.getWorkOrder(),kronosActivities.stream()
+																.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
+																.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
+														.distinct().collect(Collectors.toList());
+
+		ExcelChart chart = worksheet.getCharts().add(ChartType.BAR, "F2", "M25");
+		chart.selectData(worksheet.getCells().getSubrangeAbsolute(0, 0, chartActivityAoiList.size(), 2), true);
+
+		for (int i = 0; i < chartActivityAoiList.size(); i++) {
+			worksheet.getCell(i + 1, 0).setValue(chartActivityAoiList.get(i).getWorkOrder());
+			worksheet.getCell(i + 1, 1).setValue(chartActivityAoiList.get(i).getDowntime());
+			worksheet.getCell(i + 1, 2).setValue(chartActivityKronosList.get(i).getDowntime());
 		}
 		worksheet.getCell(0, 0).setValue("ZR");
 		worksheet.getCell(0, 1).setValue("Downtime_AR");
@@ -129,12 +137,13 @@ public class XlsProvider {
 		worksheet.getCell(0, 0).getStyle().getFont().setWeight(ExcelFont.BOLD_WEIGHT);
 		worksheet.getCell(0, 1).getStyle().getFont().setWeight(ExcelFont.BOLD_WEIGHT);
 		worksheet.getCell(0, 2).getStyle().getFont().setWeight(ExcelFont.BOLD_WEIGHT);
-		
+
 		int columnCount = worksheet.calculateMaxUsedColumns();
-		
+
 		for (int i = 0; i < columnCount; i++)
-			worksheet.getColumn(i).setWidth((int) LengthUnitConverter.convert(3, LengthUnit.CENTIMETER, LengthUnit.ZERO_CHARACTER_WIDTH_256_TH_PART));
-		
+			worksheet.getColumn(i).setWidth((int) LengthUnitConverter.convert(3, LengthUnit.CENTIMETER,
+					LengthUnit.ZERO_CHARACTER_WIDTH_256_TH_PART));
+
 		workbook.save("C:\\Users\\danelczykl\\Desktop\\Raport_porownanie_.xlsx");
 	}
 }
