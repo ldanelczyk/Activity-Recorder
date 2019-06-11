@@ -29,3 +29,4 @@ HELP.md
 .vscode/
 src/main/resources/import.sql
 test.xlsx
+db_data.txt
