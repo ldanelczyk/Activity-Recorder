@@ -14,10 +14,10 @@ import org.mockito.ArgumentCaptor;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import pl.dels.database.repository.RoleRepository;
+import pl.dels.database.repository.UserRepository;
 import pl.dels.model.Role;
 import pl.dels.model.User;
-import pl.dels.repository.RoleRepository;
-import pl.dels.repository.UserRepository;
 
 class UserServiceTest {
 

@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 import pl.dels.model.User;
 import pl.dels.model.enums.MachineNumber;
 import pl.dels.model.enums.Side;
+import pl.dels.database.repository.ActivityRepository;
+import pl.dels.database.repository.UserRepository;
 import pl.dels.model.Activity;
-import pl.dels.repository.ActivityRepository;
-import pl.dels.repository.UserRepository;
 
 @NoArgsConstructor
 @AllArgsConstructor

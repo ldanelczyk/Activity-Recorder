@@ -18,11 +18,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import pl.dels.database.repository.ActivityRepository;
+import pl.dels.database.repository.UserRepository;
 import pl.dels.model.Activity;
 import pl.dels.model.enums.MachineNumber;
 import pl.dels.model.enums.Side;
-import pl.dels.repository.ActivityRepository;
-import pl.dels.repository.UserRepository;
 
 class ActivityServiceTest {
 

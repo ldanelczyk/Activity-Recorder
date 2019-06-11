@@ -6,11 +6,10 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-
+import pl.dels.database.repository.RoleRepository;
+import pl.dels.database.repository.UserRepository;
 import pl.dels.model.Role;
 import pl.dels.model.User;
-import pl.dels.repository.RoleRepository;
-import pl.dels.repository.UserRepository;
 
 @NoArgsConstructor
 @AllArgsConstructor

@@ -30,12 +30,12 @@ import java.util.List;
 import com.poiji.bind.Poiji;
 import com.poiji.exception.PoijiExcelType;
 
+import pl.dels.database.repository.ActivityRepository;
+import pl.dels.database.repository.UserRepository;
 import pl.dels.model.Activity;
 import pl.dels.model.User;
 import pl.dels.model.enums.MachineNumber;
 import pl.dels.model.enums.Side;
-import pl.dels.repository.ActivityRepository;
-import pl.dels.repository.UserRepository;
 import pl.dels.service.ActivityService;
 
 class XlsProviderTest {

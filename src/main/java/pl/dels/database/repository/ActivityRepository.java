@@ -1,4 +1,4 @@
-package pl.dels.repository;
+package pl.dels.database.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
