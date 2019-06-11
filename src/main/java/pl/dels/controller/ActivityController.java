@@ -45,7 +45,7 @@ public class ActivityController {
 
 	@PostMapping("/stopRegistration")
 	private String stopRegistration(@RequestParam MachineNumber machineNumber, @RequestParam String workOrder,
-			@RequestParam Side side, @RequestParam String activityType, @RequestParam String comments) {
+			@RequestParam Side side, @RequestParam String activityType, @RequestParam String comments) throws ClassNotFoundException {
 
 		String nameOfLoggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
 		
