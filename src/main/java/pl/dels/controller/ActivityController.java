@@ -2,8 +2,12 @@ package pl.dels.controller;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.Timer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +21,7 @@ import pl.dels.model.Activity;
 import pl.dels.model.enums.MachineNumber;
 import pl.dels.model.enums.Side;
 import pl.dels.service.ActivityService;
+import pl.dels.toolsprovider.ScheduledTask;
 import pl.dels.toolsprovider.XlsProvider;
 
 @Controller
@@ -32,14 +37,19 @@ public class ActivityController {
 
 	@PostMapping("/startRegistration")
 	private String startRegistration(@RequestParam MachineNumber machineNumber, @RequestParam String workOrder,
-			@RequestParam Side side, @RequestParam String activityType, Model model) {
+			@RequestParam Side side, @RequestParam String activityType, Model model) throws ParseException, ClassNotFoundException, IOException {
 
 		startDateTime = new Timestamp(new Date().getTime());
 
 		Activity activity = activityService.createTempActivity(machineNumber, workOrder, side, activityType);
 
 		model.addAttribute("activity", activity);
-
+		
+		Timer timer = new Timer(); 
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = dateFormatter.parse("2019-06-12 16:46:00");
+		timer.schedule(new ScheduledTask(xlsProvider), date, 10000);
+		
 		return "started";
 	}
 
@@ -61,8 +71,7 @@ public class ActivityController {
 		try {
 			
 			xlsProvider.generateExcelFileWithAllDataFromDb("C:\\Users\\danelczykl\\Desktop\\Raport_czynnosci.xlsx");
-			xlsProvider.generateExcelFileWithChartFromAGivenWeek();
-			
+			 			
 		} catch (IOException e) {
 			
 			e.printStackTrace();
