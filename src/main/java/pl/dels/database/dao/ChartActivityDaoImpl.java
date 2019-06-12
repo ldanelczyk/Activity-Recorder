@@ -1,5 +1,7 @@
 package pl.dels.database.dao;
 
+import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +18,7 @@ public class ChartActivityDaoImpl implements ChartActivityDao {
 	private final int TIME_DIVIDER = 3600;
 
 	@Override
-	public List<ChartActivity> getAllActivities() throws ClassNotFoundException {
+	public List<ChartActivity> getAllActivities() throws ClassNotFoundException, IOException {
 
 		String getAllChartActivities = "SELECT ZASOB, ZR, CZYNNOSC_SYMBOL, CZAS_TRWANIA \r\n" + "\r\n"
 				+ "from TS_KRONOS_WYKONANIA_CZYNNOSCI \r\n" 
@@ -31,7 +33,7 @@ public class ChartActivityDaoImpl implements ChartActivityDao {
 			while (resultSet.next()) {
 
 				if (resultSet.getString("CZYNNOSC_SYMBOL").equals("Pisanie programu AOI")
-						|| resultSet.getString("CZYNNOSC_SYMBOL").equals("Pisanie programu AOI")) {
+						|| resultSet.getString("CZYNNOSC_SYMBOL").equals("Poprawa programu AOI")) {
 
 					chartActivityList.add(createChartActivityFromRs(resultSet));
 				}
