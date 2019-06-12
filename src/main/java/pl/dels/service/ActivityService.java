@@ -66,17 +66,19 @@ public class ActivityService {
 		if (comparator != null && activities != null) {
 			activities.sort(comparator);
 		}
+		
 		return activities;
 	}
 
 	public Activity createTempActivity(MachineNumber machineNumber, String workOrder, Side side, String activityType) {
 
 		Activity activity = Activity.builder()
-							.machineNumber(machineNumber)
-							.workOrder(workOrder)
-							.side(side)
-							.activityType(activityType)
-							.build();
+				.machineNumber(machineNumber)
+				.workOrder(workOrder)
+				.side(side)
+				.activityType(activityType)
+				.build();
+		
 		return activity;
 	}
 

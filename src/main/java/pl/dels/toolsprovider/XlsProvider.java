@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import com.gembox.spreadsheet.*;
 import com.gembox.spreadsheet.charts.*;
@@ -27,6 +28,7 @@ import pl.dels.model.ChartActivity;
 import pl.dels.service.ActivityService;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Service
 public class XlsProvider {
 
@@ -38,8 +40,7 @@ public class XlsProvider {
 
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet sheet = workbook.createSheet("RAPORT");
-		Object[][] datatypes = {
-				{ "Nr linii", "ZR", "STRONA", "Czynność", "Uwagi", "Data od", "Data do", "Czas", "Inżynier AOI" } };
+		Object[][] datatypes = {{"Nr linii", "ZR", "STRONA", "Czynność", "Uwagi", "Data od", "Data do", "Czas", "Inżynier AOI"}};
 
 		int rowNum = 0;
 
@@ -96,21 +97,21 @@ public class XlsProvider {
 		workbook.close();
 	}
 
-	public void generateExcelFileWithChartFromAGivenWeek() throws IOException, ClassNotFoundException {
+	public void generateExcelFileWithChartFromAGivenWeek(String path) throws IOException, ClassNotFoundException {
 
 		SpreadsheetInfo.setLicense("FREE-LIMITED-KEY");
 
 		ExcelFile workbook = new ExcelFile();
 		ExcelWorksheet worksheet = workbook.addWorksheet("Porownanie");
 
-		List<Activity> aoiActivities = activityService
-				.getAllActivities((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
+		List<Activity> aoiActivities = activityService.getAllActivities((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
 
 		List<ChartActivity> chartActivityAoiList = aoiActivities.stream()
 													.map(activity -> new ChartActivity(activity.getWorkOrder(),aoiActivities.stream()
 															.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
 															.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
-													.distinct().collect(Collectors.toList());
+													.distinct()
+													.collect(Collectors.toList());
 
 		ChartActivityDaoImpl chartActivityDao = new ChartActivityDaoImpl();
 
@@ -120,7 +121,8 @@ public class XlsProvider {
 														.map(activity -> new ChartActivity(activity.getWorkOrder(),kronosActivities.stream()
 																.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
 																.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
-														.distinct().collect(Collectors.toList());
+														.distinct()
+														.collect(Collectors.toList());
 
 		ExcelChart chart = worksheet.getCharts().add(ChartType.BAR, "F2", "M25");
 		chart.selectData(worksheet.getCells().getSubrangeAbsolute(0, 0, chartActivityAoiList.size(), 2), true);
@@ -128,7 +130,7 @@ public class XlsProvider {
 		for (int i = 0; i < chartActivityAoiList.size(); i++) {
 			worksheet.getCell(i + 1, 0).setValue(chartActivityAoiList.get(i).getWorkOrder());
 			worksheet.getCell(i + 1, 1).setValue(chartActivityAoiList.get(i).getDowntime());
-			worksheet.getCell(i + 1, 2).setValue(chartActivityKronosList.get(i).getDowntime());
+			worksheet.getCell(i + 1, 2).setValue(MathToolProvider.round(chartActivityKronosList.get(i).getDowntime(), 3));
 		}
 		worksheet.getCell(0, 0).setValue("ZR");
 		worksheet.getCell(0, 1).setValue("Downtime_AR");
@@ -144,6 +146,6 @@ public class XlsProvider {
 			worksheet.getColumn(i).setWidth((int) LengthUnitConverter.convert(3, LengthUnit.CENTIMETER,
 					LengthUnit.ZERO_CHARACTER_WIDTH_256_TH_PART));
 
-		workbook.save("C:\\Users\\danelczykl\\Desktop\\Raport_porownanie_.xlsx");
+		workbook.save(path);
 	}
 }
