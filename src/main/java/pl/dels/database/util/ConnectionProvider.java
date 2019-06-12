@@ -1,8 +1,15 @@
 package pl.dels.database.util;
 
+import java.io.File;
+import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
+import java.util.List;
+
+import org.apache.commons.io.FileUtils;
 
 public class ConnectionProvider {
 	
@@ -16,17 +23,19 @@ public class ConnectionProvider {
 
 	private String password;
 	
-	private final String hostname;
+	private String hostname;
 	
-	private ConnectionProvider() throws ClassNotFoundException, SQLException {
+	private ConnectionProvider() throws ClassNotFoundException, SQLException, IOException {
 		
-		url = "***";
+		List<String> lines = FileUtils.readLines(new File("C:\\Users\\danelczykl\\Desktop\\db_data.txt"));
+				
+		url = lines.get(0);
 
-		username = "***";
+		username = lines.get(1);
 
-		password = "***";
+		password = lines.get(2);
 		
-		hostname = "***";
+		hostname = lines.get(3);
 		
 		Class.forName(hostname);
 		
@@ -37,7 +46,7 @@ public class ConnectionProvider {
         return connection;
 }
 	
-	public static ConnectionProvider getInstance() throws ClassNotFoundException, SQLException {
+	public static ConnectionProvider getInstance() throws ClassNotFoundException, SQLException, IOException {
 		
 		if(instance==null) {
 			
@@ -49,5 +58,4 @@ public class ConnectionProvider {
 		}
 		return instance;
 	}
-
 }
