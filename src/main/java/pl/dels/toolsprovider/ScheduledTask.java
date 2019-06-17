@@ -16,7 +16,7 @@ public class ScheduledTask extends TimerTask {
 		
 		try {
 			
-			xlsProvider.generateExcelFileWithChartFromAGivenWeek("C:\\Users\\danelczykl\\Desktop\\Raport_porownanie_"+MathToolProvider.convertTimeToFileName(LocalTime.now())+".xlsx");
+			xlsProvider.generateExcelFileWithChartFromAGivenWeek("C:\\Users\\danelczykl\\Desktop\\Raport_porownanie_"+ToolProvider.convertTimeToFileName(LocalTime.now())+".xlsx");
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
