@@ -1,11 +1,13 @@
 package pl.dels.controller;
 
 import java.io.IOException;
+
 import java.sql.Timestamp;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+
 import java.util.Date;
 import java.util.Timer;
 
@@ -47,7 +49,7 @@ public class ActivityController {
 		
 		Timer timer = new Timer(); 
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date date = dateFormatter.parse("2019-06-12 16:46:00");
+		Date date = dateFormatter.parse("2019-06-17 22:55:00");
 		timer.schedule(new ScheduledTask(xlsProvider), date, 10000);
 		
 		return "started";
@@ -62,7 +64,7 @@ public class ActivityController {
 		//String nameOfLoggedUser = "ExampleUser";
 
 		Timestamp stopDateTime = new Timestamp(new Date().getTime());
-
+		
 		double downtime = activityService.downtimeCounter(startDateTime, stopDateTime);
 		
 		activityService.saveActivityInDatabase(machineNumber, workOrder, side, activityType, comments,
