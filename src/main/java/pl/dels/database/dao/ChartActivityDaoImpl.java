@@ -18,11 +18,15 @@ public class ChartActivityDaoImpl implements ChartActivityDao {
 	private final int TIME_DIVIDER = 3600;
 
 	@Override
-	public List<ChartActivity> getAllActivities() throws ClassNotFoundException, IOException {
+	public List<ChartActivity> getAllActivities(String startDate, String stopDate)
+			throws ClassNotFoundException, IOException {
 
-		String getAllChartActivities = "SELECT ZASOB, ZR, CZYNNOSC_SYMBOL, CZAS_TRWANIA \r\n" + "\r\n"
-				+ "from TS_KRONOS_WYKONANIA_CZYNNOSCI \r\n" 
-				+ "\r\n" + "WHERE ZR = '25261'";
+		String getAllChartActivities = "SELECT DISTINCT ZR, CZAS_TRWANIA \r\n"
+										+ "from TS_KRONOS_WYKONANIA_CZYNNOSCI \r\n"
+										+ "WHERE (CZYNNOSC_SYMBOL = 'Pisanie programu AOI' AND (DATA_OD BETWEEN '" + startDate + "' AND '"+ stopDate + "') AND GRUPA_ZASOBOW = 'SMT') \r\n"
+										+ "OR    (CZYNNOSC_SYMBOL = 'Poprawa programu AOI' AND (DATA_OD BETWEEN '" + startDate + "' AND '"+ stopDate + "') AND GRUPA_ZASOBOW = 'SMT')";
+
+		System.out.println(getAllChartActivities);
 
 		List<ChartActivity> chartActivityList = new ArrayList<>();
 
@@ -32,21 +36,17 @@ public class ChartActivityDaoImpl implements ChartActivityDao {
 
 			while (resultSet.next()) {
 
-				if (resultSet.getString("CZYNNOSC_SYMBOL").equals("Pisanie programu AOI")
-						|| resultSet.getString("CZYNNOSC_SYMBOL").equals("Poprawa programu AOI")) {
-
-					chartActivityList.add(createChartActivityFromRs(resultSet));
-				}
+				chartActivityList.add(createChartActivityFromRs(resultSet));
 			}
-
+			
 		} catch (
 
 		SQLException e)
 
 		{
 			e.printStackTrace();
-
 		}
+
 		return chartActivityList;
 	}
 
