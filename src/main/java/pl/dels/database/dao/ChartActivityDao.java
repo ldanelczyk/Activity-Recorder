@@ -8,5 +8,5 @@ import pl.dels.model.ChartActivity;
 
 public interface ChartActivityDao {
 
-	List<ChartActivity> getAllActivities() throws ClassNotFoundException, IOException;
+	List<ChartActivity> getAllActivities(String startDate, String stopDate) throws ClassNotFoundException, IOException;
 }
