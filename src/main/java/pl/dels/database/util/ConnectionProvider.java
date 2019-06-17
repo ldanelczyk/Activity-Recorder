@@ -56,6 +56,7 @@ public class ConnectionProvider {
 			
 			instance = new ConnectionProvider();	
 		}
+		
 		return instance;
 	}
 }
