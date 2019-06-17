@@ -39,8 +39,7 @@ public class ActivityService {
 	private final double ROUND_CONSTANCE = 1000;
 
 	public Activity saveActivityInDatabase(MachineNumber machineNumber, String workOrder, Side side, String activityType,
-			String comments, Timestamp startDateTime, Timestamp stopDateTime, double downtime,
-			String nameOfLoggedUser) {
+			String comments, Timestamp startDateTime, Timestamp stopDateTime, double downtime, String nameOfLoggedUser) {
 
 		Activity activity = Activity.builder()
 				.machineNumber(machineNumber)
