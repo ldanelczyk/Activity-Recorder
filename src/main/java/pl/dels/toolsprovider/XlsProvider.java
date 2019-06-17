@@ -63,8 +63,7 @@ public class XlsProvider {
 		CreationHelper createHelper = workbook.getCreationHelper();
 		cellStyle.setDataFormat(createHelper.createDataFormat().getFormat("m/d/yy h:mm"));
 
-		List<Activity> activities = activityService
-				.getAllActivities((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
+		List<Activity> activities = activityService.getAllActivities((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
 
 		int rowNum2 = 1;
 
@@ -149,16 +148,21 @@ public class XlsProvider {
 
 		chartActivityKronosList.forEach(System.out::println);
 
-		ExcelChart chart = worksheet.getCharts().add(ChartType.BAR, "F2", "M25");
+		ColumnChart chart = (ColumnChart) worksheet.getCharts().add(ChartType.COLUMN, "F2", "M25");
 		chart.selectData(worksheet.getCells().getSubrangeAbsolute(0, 0, chartActivityAoiList.size(), 2), true);
+		
+		chart.getTitle().setText("Czas czynności AOI");
+		chart.getAxes().getHorizontal().getTitle().setText("Numer ZR");
+	    chart.getAxes().getVertical().getTitle().setText("Czas czynności AOI [h]");
 
 		for (int i = 0; i < chartActivityAoiList.size(); i++) {
 			worksheet.getCell(i + 1, 0).setValue(chartActivityAoiList.get(i).getWorkOrder());
 			worksheet.getCell(i + 1, 1).setValue(chartActivityAoiList.get(i).getDowntime());
 			worksheet.getCell(i + 1, 2).setValue(ToolProvider.round(chartActivityKronosList.get(i).getDowntime(), 3));
 		}
+		
 		worksheet.getCell(0, 0).setValue("ZR");
-		worksheet.getCell(0, 1).setValue("Downtime_AR");
+		worksheet.getCell(0, 1).setValue("Downtime_DPP");
 		worksheet.getCell(0, 2).setValue("Downtime_Kronos");
 
 		worksheet.getCell(0, 0).getStyle().getFont().setWeight(ExcelFont.BOLD_WEIGHT);
