@@ -23,6 +23,7 @@ import pl.dels.database.repository.UserRepository;
 import pl.dels.model.Activity;
 import pl.dels.model.enums.MachineNumber;
 import pl.dels.model.enums.Side;
+import pl.dels.toolsprovider.TimeToolsProvider;
 
 class ActivityServiceTest {
 
@@ -69,7 +70,7 @@ class ActivityServiceTest {
 		given(activityRepository.findAll()).willReturn(createdActivityList);
 		
 		//when
-		List<Activity> returnedActivityList = activityService.getAllActivities((a1, a2) -> a1.getWorkOrder().compareTo(a2.getWorkOrder()));
+		List<Activity> returnedActivityList = activityService.getAllActivitiesFromMySql((a1, a2) -> a1.getWorkOrder().compareTo(a2.getWorkOrder()));
 		
 		//then
 		verify(activityRepository, times(1)).findAll();
@@ -102,7 +103,7 @@ class ActivityServiceTest {
 		Timestamp stopDateTime = new Timestamp(2019, 5, 23, 21, 30, 10, 0);
 		
 		//when
-		double downtime = activityService.downtimeCounter(startDateTime, stopDateTime);
+		double downtime = TimeToolsProvider.downtimeCounter(startDateTime, stopDateTime);
 		
 		//then
 		assertThat(downtime, equalTo(0.5));

@@ -1,12 +1,11 @@
 package pl.dels.service;
 
+import java.io.IOException;
 import java.sql.Timestamp;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +16,13 @@ import lombok.NoArgsConstructor;
 import pl.dels.model.User;
 import pl.dels.model.enums.MachineNumber;
 import pl.dels.model.enums.Side;
+import pl.dels.toolsprovider.DateToolsProvider;
+import pl.dels.database.dao.ActivityDao;
+import pl.dels.database.dao.ActivityDaoImpl;
 import pl.dels.database.repository.ActivityRepository;
 import pl.dels.database.repository.UserRepository;
 import pl.dels.model.Activity;
+import pl.dels.model.ChartActivity;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,12 +34,6 @@ public class ActivityService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
-	private final double DIVIDER_OF_SECONDS = 1000000000;
-
-	private final double DIVIDER_OF_HOUR = 3600;
-
-	private final double ROUND_CONSTANCE = 1000;
 
 	public Activity saveActivityInDatabase(MachineNumber machineNumber, String workOrder, Side side, String activityType,
 			String comments, Timestamp startDateTime, Timestamp stopDateTime, double downtime, String nameOfLoggedUser) {
@@ -58,7 +55,7 @@ public class ActivityService {
 		return activityRepository.save(activity);		
 	}
 
-	public List<Activity> getAllActivities(Comparator<Activity> comparator) {
+	public List<Activity> getAllActivitiesFromMySql(Comparator<Activity> comparator) {
 		
 		List<Activity> activities = activityRepository.findAll();
 		
@@ -67,6 +64,69 @@ public class ActivityService {
 		}
 		
 		return activities;
+	}
+	
+	public List<ChartActivity> getFilteredActivitiesFromMySql() {
+		
+		List<Activity> aoiActivities = getAllActivitiesFromMySql((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
+		
+		List<String> dateBetween = DateToolsProvider.getDatesBetween();
+	
+		System.out.println();
+		System.out.println("Daty które mają być sprawdzane docelowo");
+		
+		dateBetween.forEach(System.out::println);
+				
+		//TEMP
+		String mondayOfTheWeek = "2019-06-18";
+		String sundayOfTheWeek = "2019-06-20";	
+
+		//POPRAWIĆ FILTROWANIE ABY BYŁO POMIEDZY TYGODNIE
+		/*List<Activity> filteredActivityList = aoiActivities.stream()
+		.filter(activity -> dateBetween.stream().anyMatch(date -> date.equals(String.valueOf(activity.getStartDateTime()).substring(0, 10))))
+		.collect(Collectors.toList());*/
+		
+		List<ChartActivity> chartActivityAoiList = aoiActivities.stream()
+													.filter(activity -> String.valueOf(activity.getStartDateTime()).substring(0, 10).equals(sundayOfTheWeek))
+													.map(activity -> new ChartActivity(activity.getWorkOrder(),aoiActivities.stream()
+															.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
+															.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
+													.sorted((activity1, activity2) -> activity1.getWorkOrder().compareTo(activity2.getWorkOrder()))
+													.distinct()
+													.collect(Collectors.toList());
+		//Weryfikacja czynności
+		System.out.println();
+		System.out.println("Czynności AR:");
+
+		chartActivityAoiList.forEach(System.out::println);
+		
+		return chartActivityAoiList;
+	}
+	
+	public List<ChartActivity> getFilteredActivitiesFromFirebird() throws ClassNotFoundException, IOException {
+				
+		//TEMP
+		String mondayOfTheWeek = "2019-06-18";
+		String sundayOfTheWeek = "2019-06-26";	
+		
+		ActivityDao activityDao = new ActivityDaoImpl();
+
+		List<ChartActivity> kronosActivities = activityDao.getAllActivities(mondayOfTheWeek, sundayOfTheWeek);
+
+		List<ChartActivity> chartActivityKronosList = kronosActivities.stream()
+														.map(activity -> new ChartActivity(activity.getWorkOrder(),kronosActivities.stream()
+																.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
+																.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
+														.sorted((activityWO1, activityWO2) -> activityWO1.getWorkOrder().compareTo(activityWO2.getWorkOrder()))
+														.distinct()
+														.collect(Collectors.toList());
+		//Weryfikacja czynności	
+		System.out.println();
+		System.out.println("Czynności KRONOS:");
+
+		chartActivityKronosList.forEach(System.out::println);
+		
+		return chartActivityKronosList;
 	}
 
 	public Activity createTempActivity(MachineNumber machineNumber, String workOrder, Side side, String activityType) {
@@ -79,20 +139,5 @@ public class ActivityService {
 				.build();
 		
 		return activity;
-	}
-
-	public double downtimeCounter(Timestamp startDateTime, Timestamp stopDateTime) {
-
-		LocalDateTime localStartDateTime = startDateTime.toLocalDateTime();
-
-		LocalDateTime localStopDateTime = stopDateTime.toLocalDateTime();
-
-		long differenceBetweenDateInNanoseconds = ChronoUnit.NANOS.between(localStartDateTime, localStopDateTime);
-
-		double downtime = differenceBetweenDateInNanoseconds / DIVIDER_OF_SECONDS / DIVIDER_OF_HOUR;
-
-		double downtimeInHour = Math.floor(downtime * ROUND_CONSTANCE) / ROUND_CONSTANCE;
-
-		return downtimeInHour;
 	}
 }

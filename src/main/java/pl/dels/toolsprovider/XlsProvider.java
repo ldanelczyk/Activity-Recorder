@@ -4,7 +4,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -22,7 +21,6 @@ import lombok.NoArgsConstructor;
 import com.gembox.spreadsheet.*;
 import com.gembox.spreadsheet.charts.*;
 
-import pl.dels.database.dao.ChartActivityDaoImpl;
 import pl.dels.model.Activity;
 import pl.dels.model.ChartActivity;
 import pl.dels.service.ActivityService;
@@ -35,12 +33,11 @@ public class XlsProvider {
 	@Autowired
 	private ActivityService activityService;
 
-	// method that generates excel file
 	public void generateExcelFileWithAllDataFromDb(String path) throws IOException {
 
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet sheet = workbook.createSheet("RAPORT");
-		Object[][] datatypes = {{"Nr linii", "ZR", "STRONA", "Czynność", "Uwagi", "Data od", "Data do", "Czas", "Inżynier AOI"}};
+		Object[][] datatypes = {{ "Nr linii", "ZR", "STRONA", "Czynność", "Uwagi", "Data od", "Data do", "Czas", "Inżynier AOI" } };
 
 		int rowNum = 0;
 
@@ -63,7 +60,7 @@ public class XlsProvider {
 		CreationHelper createHelper = workbook.getCreationHelper();
 		cellStyle.setDataFormat(createHelper.createDataFormat().getFormat("m/d/yy h:mm"));
 
-		List<Activity> activities = activityService.getAllActivities((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
+		List<Activity> activities = activityService.getAllActivitiesFromMySql((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
 
 		int rowNum2 = 1;
 
@@ -103,64 +100,23 @@ public class XlsProvider {
 		ExcelFile workbook = new ExcelFile();
 		ExcelWorksheet worksheet = workbook.addWorksheet("Porownanie");
 
-		List<Activity> aoiActivities = activityService.getAllActivities((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
-		
-		List<String> dateBetween = DateCoverter.getDatesBetween();
-	
-		System.out.println("Daty które mają być sprawdzane docelowo");
-		
-		dateBetween.forEach(System.out::println);
-		
-		String mondayOfTheWeek = "2019-05-19";
-		String sundayOfTheWeek = "2019-05-20";	
+		List<ChartActivity> chartActivityAoiList = activityService.getFilteredActivitiesFromMySql();
 
-		//POPRAWIĆ FILTROWANIE ABY BYŁO POMIEDZY TYGODNIE
-		/*List<Activity> filteredActivityList = aoiActivities.stream()
-		.filter(activity -> dateBetween.stream().anyMatch(date -> date.equals(String.valueOf(activity.getStartDateTime()).substring(0, 10))))
-		.collect(Collectors.toList());*/
-		
-		List<ChartActivity> chartActivityAoiList = aoiActivities.stream()
-													.filter(activity -> String.valueOf(activity.getStartDateTime()).substring(0, 10).equals(sundayOfTheWeek))
-													.map(activity -> new ChartActivity(activity.getWorkOrder(),aoiActivities.stream()
-															.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
-															.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
-													.sorted((activity1, activity2) -> activity1.getWorkOrder().compareTo(activity2.getWorkOrder()))
-													.distinct()
-													.collect(Collectors.toList());
-		
-		System.out.println("Czynności AR:");
-
-		chartActivityAoiList.forEach(System.out::println);
-		
-		ChartActivityDaoImpl chartActivityDao = new ChartActivityDaoImpl();
-
-		List<ChartActivity> kronosActivities = chartActivityDao.getAllActivities(mondayOfTheWeek, sundayOfTheWeek);
-		
-		List<ChartActivity> chartActivityKronosList = kronosActivities.stream()
-														.map(activity -> new ChartActivity(activity.getWorkOrder(),kronosActivities.stream()
-																.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
-																.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
-														.sorted((activityWO1, activityWO2) -> activityWO1.getWorkOrder().compareTo(activityWO2.getWorkOrder()))
-														.distinct()
-														.collect(Collectors.toList());
-		
-		System.out.println("Czynności KRONOS:");
-
-		chartActivityKronosList.forEach(System.out::println);
+		List<ChartActivity> chartActivityKronosList = activityService.getFilteredActivitiesFromFirebird();
 
 		ColumnChart chart = (ColumnChart) worksheet.getCharts().add(ChartType.COLUMN, "F2", "M25");
 		chart.selectData(worksheet.getCells().getSubrangeAbsolute(0, 0, chartActivityAoiList.size(), 2), true);
-		
+
 		chart.getTitle().setText("Czas czynności AOI");
 		chart.getAxes().getHorizontal().getTitle().setText("Numer ZR");
-	    chart.getAxes().getVertical().getTitle().setText("Czas czynności AOI [h]");
+		chart.getAxes().getVertical().getTitle().setText("Czas czynności AOI [h]");
 
 		for (int i = 0; i < chartActivityAoiList.size(); i++) {
 			worksheet.getCell(i + 1, 0).setValue(chartActivityAoiList.get(i).getWorkOrder());
 			worksheet.getCell(i + 1, 1).setValue(chartActivityAoiList.get(i).getDowntime());
-			worksheet.getCell(i + 1, 2).setValue(ToolProvider.round(chartActivityKronosList.get(i).getDowntime(), 3));
+			worksheet.getCell(i + 1, 2).setValue(MathToolsProvider.round(chartActivityKronosList.get(i).getDowntime(), 3));
 		}
-		
+
 		worksheet.getCell(0, 0).setValue("ZR");
 		worksheet.getCell(0, 1).setValue("Downtime_DPP");
 		worksheet.getCell(0, 2).setValue("Downtime_Kronos");

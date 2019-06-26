@@ -1,8 +1,6 @@
 package pl.dels.toolsprovider;
 
-import java.time.LocalTime;
-
-public class ToolProvider {
+public class MathToolsProvider {
 
 	public static double round(double value, int places) {
 
@@ -17,14 +15,5 @@ public class ToolProvider {
 		long tmp = Math.round(value);
 
 		return (double) tmp / factor;
-	}
-
-	public static String convertTimeToFileName(LocalTime localTime) {
-
-		String localTimeToConvert = String.valueOf(localTime);
-
-		String localTimeConverted = localTimeToConvert.replace(':', '_');
-
-		return localTimeConverted;
 	}
 }

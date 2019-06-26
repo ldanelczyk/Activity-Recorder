@@ -24,6 +24,7 @@ import pl.dels.model.enums.MachineNumber;
 import pl.dels.model.enums.Side;
 import pl.dels.service.ActivityService;
 import pl.dels.toolsprovider.ScheduledTask;
+import pl.dels.toolsprovider.TimeToolsProvider;
 import pl.dels.toolsprovider.XlsProvider;
 
 @Controller
@@ -65,7 +66,7 @@ public class ActivityController {
 
 		Timestamp stopDateTime = new Timestamp(new Date().getTime());
 		
-		double downtime = activityService.downtimeCounter(startDateTime, stopDateTime);
+		double downtime = TimeToolsProvider.downtimeCounter(startDateTime, stopDateTime);
 		
 		activityService.saveActivityInDatabase(machineNumber, workOrder, side, activityType, comments,
 				startDateTime, stopDateTime, downtime, nameOfLoggedUser);

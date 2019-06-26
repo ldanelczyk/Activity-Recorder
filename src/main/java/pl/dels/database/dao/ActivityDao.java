@@ -6,7 +6,7 @@ import java.util.List;
 
 import pl.dels.model.ChartActivity;
 
-public interface ChartActivityDao {
+public interface ActivityDao {
 
 	List<ChartActivity> getAllActivities(String startDate, String stopDate) throws ClassNotFoundException, IOException;
 }

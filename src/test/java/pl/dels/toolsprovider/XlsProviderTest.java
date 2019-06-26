@@ -40,28 +40,21 @@ import pl.dels.service.ActivityService;
 
 class XlsProviderTest {
 	
+	private ActivityRepository activityRepository;
+	private XlsProvider xlsProvider;
+
 	@AfterAll
 	static void removeTestFile() {
-		
+
 		File testedFile = new File("test.xlsx");
 		testedFile.delete();
 	}
 
 	@Test
-	void testExcelGenerator() throws IOException {
+	void generateExcelFileWithAllDataFromDb_test() throws IOException {
 
 		// given
-		List<Activity> listWithPreparedActivities = createActivities();
-
-		ActivityRepository activityRepository = mock(ActivityRepository.class);
-		UserRepository userRepository = mock(UserRepository.class);
-
-		ActivityService activityService = new ActivityService(activityRepository, userRepository);
-
-		XlsProvider xlsProvider = new XlsProvider(activityService);
-
-		given(activityService.getAllActivities((a1, a2) -> a1.getWorkOrder().compareTo(a2.getWorkOrder())))
-				.willReturn(listWithPreparedActivities);
+		prepareMockForAllActivityReport();
 
 		// when
 		xlsProvider.generateExcelFileWithAllDataFromDb("test.xlsx");
@@ -72,24 +65,49 @@ class XlsProviderTest {
 		assertEquals("ZRYYYY", listWithRodeObjects.get(0).getWorkOrder());
 		verify(activityRepository, times(1)).findAll();
 		assertThat(listWithRodeObjects, hasSize(3));
-		
+
 		for (ActivityPoiji activityPoiji : listWithRodeObjects) {
-			
-		       assertThat(activityPoiji, notNullValue());
-			   assertThat(String.valueOf(activityPoiji.getMachineNumber()), containsString("AOI"));
-		       assertThat(String.valueOf(activityPoiji.getMachineNumber()).length(), lessThan(5));
-		       assertThat(activityPoiji.getWorkOrder(), containsString("ZR"));
-		       assertThat(activityPoiji.getWorkOrder().length(), lessThan(8));
-		       assertThat(String.valueOf(activityPoiji.getSide()), containsString("T"));
-		       assertThat(String.valueOf(activityPoiji.getSide()).length(), lessThan(4));
-		       assertThat(activityPoiji.getActivityType(), containsString("programu"));
-		       assertThat(activityPoiji.getActivityType().length(), lessThan(21));		
+
+			assertThat(activityPoiji, notNullValue());
+			assertThat(String.valueOf(activityPoiji.getMachineNumber()), containsString("AOI"));
+			assertThat(String.valueOf(activityPoiji.getMachineNumber()).length(), lessThan(5));
+			assertThat(activityPoiji.getWorkOrder(), containsString("ZR"));
+			assertThat(activityPoiji.getWorkOrder().length(), lessThan(8));
+			assertThat(String.valueOf(activityPoiji.getSide()), containsString("T"));
+			assertThat(String.valueOf(activityPoiji.getSide()).length(), lessThan(4));
+			assertThat(activityPoiji.getActivityType(), containsString("programu"));
+			assertThat(activityPoiji.getActivityType().length(), lessThan(21));
 		}
+	}
+
+	@Test
+	void generateExcelFileWithChartFromAGivenWeek_test() throws ClassNotFoundException, IOException {
+		
+		// given
+		prepareMockForAllActivityReport();
+		
+		xlsProvider.generateExcelFileWithChartFromAGivenWeek("test2.xlsx");
+
+	}
+
+	private void prepareMockForAllActivityReport() {
+
+		List<Activity> listWithPreparedActivities = createActivities();
+
+		activityRepository = mock(ActivityRepository.class);
+		UserRepository userRepository = mock(UserRepository.class);
+
+		ActivityService activityService = new ActivityService(activityRepository, userRepository);
+
+		xlsProvider = new XlsProvider(activityService);
+
+		given(activityService.getAllActivitiesFromMySql((a1, a2) -> a1.getWorkOrder().compareTo(a2.getWorkOrder())))
+				.willReturn(listWithPreparedActivities);
 	}
 
 	private List<ActivityPoiji> readDataFromCreatedExcelFile() throws IOException {
 
-		//PoijiOptions options = PoijiOptionsBuilder.settings(0).build();
+		// PoijiOptions options = PoijiOptionsBuilder.settings(0).build();
 
 		InputStream stream = new FileInputStream(new File("test.xlsx"));
 
@@ -99,46 +117,40 @@ class XlsProviderTest {
 	}
 
 	private List<Activity> createActivities() {
-		
+
 		Timestamp startDateTime = new Timestamp(new Date().getTime());
 
 		Timestamp stopDateTime = new Timestamp(new Date().getTime());
 
 		Activity activity1 = Activity.builder()
 				.machineNumber(MachineNumber.AOI1)
-				.workOrder("ZRXXXX")
-				.side(Side.TOP)
+				.workOrder("ZRXXXX").side(Side.TOP)
 				.activityType("poprawa programu AOI")
 				.comments("Example Comment4")
 				.startDateTime(startDateTime)
 				.stopDateTime(stopDateTime)
-				.downtime(0.015)
-				.user(new User("username", "encodedPassword"))
+				.downtime(0.015).user(new User("username", "encodedPassword"))
 				.build();
 
 		Activity activity2 = Activity.builder()
 				.machineNumber(MachineNumber.AOI2)
-				.workOrder("ZRXXYY")
-				.side(Side.BOT)
+				.workOrder("ZRXXYY").side(Side.BOT)
 				.activityType("poprawa programu AOI")
 				.comments("Example Comment3")
 				.startDateTime(startDateTime)
 				.stopDateTime(stopDateTime)
 				.downtime(8.015)
-				.user(new User("username", "encodedPassword"))
-				.build();
+				.user(new User("username", "encodedPassword")).build();
 
 		Activity activity3 = Activity.builder()
 				.machineNumber(MachineNumber.AOI1)
-				.workOrder("ZRYYYY")
-				.side(Side.BOT)
+				.workOrder("ZRYYYY").side(Side.BOT)
 				.activityType("pisanie programu AOI")
 				.comments("Example Comment5")
 				.startDateTime(startDateTime)
 				.stopDateTime(stopDateTime)
 				.downtime(10.008)
-				.user(new User("username", "encodedPassword"))
-				.build();
+				.user(new User("username", "encodedPassword")).build();
 
 		return Arrays.asList(activity1, activity2, activity3);
 	}

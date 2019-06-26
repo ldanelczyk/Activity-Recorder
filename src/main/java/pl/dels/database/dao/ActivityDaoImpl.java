@@ -13,7 +13,7 @@ import java.util.List;
 import pl.dels.database.util.ConnectionProvider;
 import pl.dels.model.ChartActivity;
 
-public class ChartActivityDaoImpl implements ChartActivityDao {
+public class ActivityDaoImpl implements ActivityDao {
 
 	private final int TIME_DIVIDER = 3600;
 
