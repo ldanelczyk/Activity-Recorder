@@ -24,6 +24,10 @@ import pl.dels.database.repository.UserRepository;
 import pl.dels.model.Activity;
 import pl.dels.model.ChartActivity;
 
+/**
+ * @author danelczykl
+ *
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Service
@@ -34,6 +38,9 @@ public class ActivityService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private ActivityDao activityDao;
 
 	public Activity saveActivityInDatabase(MachineNumber machineNumber, String workOrder, Side side, String activityType,
 			String comments, Timestamp startDateTime, Timestamp stopDateTime, double downtime, String nameOfLoggedUser) {
@@ -60,13 +67,14 @@ public class ActivityService {
 		List<Activity> activities = activityRepository.findAll();
 		
 		if (comparator != null && activities != null) {
+		
 			activities.sort(comparator);
 		}
 		
 		return activities;
 	}
 	
-	public List<ChartActivity> getFilteredActivitiesFromMySql() {
+	public List<ChartActivity> getFilteredChartActivitiesFromMySql() {
 		
 		List<Activity> aoiActivities = getAllActivitiesFromMySql((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
 		
@@ -87,13 +95,13 @@ public class ActivityService {
 		.collect(Collectors.toList());*/
 		
 		List<ChartActivity> chartActivityAoiList = aoiActivities.stream()
-													.filter(activity -> String.valueOf(activity.getStartDateTime()).substring(0, 10).equals(sundayOfTheWeek))
-													.map(activity -> new ChartActivity(activity.getWorkOrder(),aoiActivities.stream()
-															.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
-															.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
-													.sorted((activity1, activity2) -> activity1.getWorkOrder().compareTo(activity2.getWorkOrder()))
-													.distinct()
-													.collect(Collectors.toList());
+												.filter(activity -> String.valueOf(activity.getStartDateTime()).substring(0, 10).equals(sundayOfTheWeek))
+												.map(activity -> new ChartActivity(activity.getWorkOrder(),aoiActivities.stream()
+														.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
+														.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
+												.sorted((activity1, activity2) -> activity1.getWorkOrder().compareTo(activity2.getWorkOrder()))
+												.distinct()
+												.collect(Collectors.toList());
 		//Weryfikacja czynności
 		System.out.println();
 		System.out.println("Czynności AR:");
@@ -103,23 +111,26 @@ public class ActivityService {
 		return chartActivityAoiList;
 	}
 	
-	public List<ChartActivity> getFilteredActivitiesFromFirebird() throws ClassNotFoundException, IOException {
+	public List<ChartActivity> getFilteredChartActivitiesFromFirebird() throws ClassNotFoundException, IOException {
 				
 		//TEMP
 		String mondayOfTheWeek = "2019-06-18";
 		String sundayOfTheWeek = "2019-06-26";	
 		
-		ActivityDao activityDao = new ActivityDaoImpl();
-
+		
 		List<ChartActivity> kronosActivities = activityDao.getAllActivities(mondayOfTheWeek, sundayOfTheWeek);
+		
+		System.out.println("Czynności KRONOS przed filtrowaniem:");
+
+		kronosActivities.forEach(System.out::println);
 
 		List<ChartActivity> chartActivityKronosList = kronosActivities.stream()
-														.map(activity -> new ChartActivity(activity.getWorkOrder(),kronosActivities.stream()
-																.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
-																.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
-														.sorted((activityWO1, activityWO2) -> activityWO1.getWorkOrder().compareTo(activityWO2.getWorkOrder()))
-														.distinct()
-														.collect(Collectors.toList());
+												.map(activity -> new ChartActivity(activity.getWorkOrder(),kronosActivities.stream()
+														.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
+														.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
+												.sorted((activityWO1, activityWO2) -> activityWO1.getWorkOrder().compareTo(activityWO2.getWorkOrder()))
+												.distinct()
+												.collect(Collectors.toList());
 		//Weryfikacja czynności	
 		System.out.println();
 		System.out.println("Czynności KRONOS:");
@@ -130,7 +141,7 @@ public class ActivityService {
 	}
 
 	public Activity createTempActivity(MachineNumber machineNumber, String workOrder, Side side, String activityType) {
-
+		
 		Activity activity = Activity.builder()
 				.machineNumber(machineNumber)
 				.workOrder(workOrder)
@@ -139,5 +150,28 @@ public class ActivityService {
 				.build();
 		
 		return activity;
+	}
+
+	public ActivityService(ActivityRepository activityRepository) {
+		super();
+		this.activityRepository = activityRepository;
+	}
+
+	public ActivityService(ActivityDao activityDao, ActivityRepository activityRepository) {
+		super();
+		this.activityDao = activityDao;
+		this.activityRepository = activityRepository;
+
+	}
+
+	public ActivityService(ActivityRepository activityRepository, UserRepository userRepository) {
+		super();
+		this.activityRepository = activityRepository;
+		this.userRepository = userRepository;
+	}
+
+	public ActivityService(ActivityDao activityDao) {
+		super();
+		this.activityDao = activityDao;
 	}
 }
