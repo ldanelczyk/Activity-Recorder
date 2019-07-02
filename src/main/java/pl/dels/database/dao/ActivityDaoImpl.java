@@ -10,9 +10,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import pl.dels.database.util.ConnectionProvider;
 import pl.dels.model.ChartActivity;
 
+@Repository
 public class ActivityDaoImpl implements ActivityDao {
 
 	private final int TIME_DIVIDER = 3600;
