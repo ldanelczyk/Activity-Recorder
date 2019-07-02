@@ -100,9 +100,9 @@ public class XlsProvider {
 		ExcelFile workbook = new ExcelFile();
 		ExcelWorksheet worksheet = workbook.addWorksheet("Porownanie");
 
-		List<ChartActivity> chartActivityAoiList = activityService.getFilteredActivitiesFromMySql();
+		List<ChartActivity> chartActivityAoiList = activityService.getFilteredChartActivitiesFromMySql();
 
-		List<ChartActivity> chartActivityKronosList = activityService.getFilteredActivitiesFromFirebird();
+		List<ChartActivity> chartActivityKronosList = activityService.getFilteredChartActivitiesFromFirebird();
 
 		ColumnChart chart = (ColumnChart) worksheet.getCharts().add(ChartType.COLUMN, "F2", "M25");
 		chart.selectData(worksheet.getCells().getSubrangeAbsolute(0, 0, chartActivityAoiList.size(), 2), true);
