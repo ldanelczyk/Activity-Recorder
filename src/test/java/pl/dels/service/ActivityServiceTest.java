@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
 import static org.mockito.BDDMockito.*;
-
+import static org.mockito.Mockito.mock;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import pl.dels.database.dao.ActivityDao;
+import pl.dels.database.dao.ActivityDaoImpl;
 import pl.dels.database.repository.ActivityRepository;
 import pl.dels.database.repository.UserRepository;
 import pl.dels.model.Activity;
@@ -63,9 +65,8 @@ class ActivityServiceTest {
 		List<Activity> createdActivityList = createActivities();
 		
 		ActivityRepository activityRepository = mock(ActivityRepository.class);
-		UserRepository userRepository = mock(UserRepository.class);
 		
-		ActivityService activityService = new ActivityService(activityRepository, userRepository);
+		ActivityService activityService = new ActivityService(activityRepository);
 		
 		given(activityRepository.findAll()).willReturn(createdActivityList);
 		
