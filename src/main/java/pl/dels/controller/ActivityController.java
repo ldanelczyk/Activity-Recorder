@@ -32,51 +32,54 @@ public class ActivityController {
 
 	@Autowired
 	private ActivityService activityService;
-	
+
 	@Autowired
 	private XlsProvider xlsProvider;
-	
+
 	private Timestamp startDateTime;
 
 	@PostMapping("/startRegistration")
 	private String startRegistration(@RequestParam MachineNumber machineNumber, @RequestParam String workOrder,
-			@RequestParam Side side, @RequestParam String activityType, Model model) throws ParseException, ClassNotFoundException, IOException {
+			@RequestParam Side side, @RequestParam String activityType, Model model)
+			throws ParseException, ClassNotFoundException, IOException {
 
 		startDateTime = new Timestamp(new Date().getTime());
 
 		Activity activity = activityService.createTempActivity(machineNumber, workOrder, side, activityType);
 
 		model.addAttribute("activity", activity);
-		
-		Timer timer = new Timer(); 
+
+		Timer timer = new Timer();
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date date = dateFormatter.parse("2019-06-17 22:55:00");
 		timer.schedule(new ScheduledTask(xlsProvider), date, 10000);
-		
+
 		return "started";
 	}
 
 	@PostMapping("/stopRegistration")
 	private String stopRegistration(@RequestParam MachineNumber machineNumber, @RequestParam String workOrder,
-			@RequestParam Side side, @RequestParam String activityType, @RequestParam String comments) throws ClassNotFoundException {
+			@RequestParam Side side, @RequestParam String activityType, @RequestParam String comments)
+			throws ClassNotFoundException {
 
 		String nameOfLoggedUser = SecurityContextHolder.getContext().getAuthentication().getName();
-		
+
+		//TEMP ref for test
 		//String nameOfLoggedUser = "ExampleUser";
 
 		Timestamp stopDateTime = new Timestamp(new Date().getTime());
-		
+
 		double downtime = TimeToolsProvider.downtimeCounter(startDateTime, stopDateTime);
-		
-		activityService.saveActivityInDatabase(machineNumber, workOrder, side, activityType, comments,
-				startDateTime, stopDateTime, downtime, nameOfLoggedUser);
-		
+
+		activityService.saveActivityInDatabase(machineNumber, workOrder, side, activityType, comments, startDateTime,
+				stopDateTime, downtime, nameOfLoggedUser);
+
 		try {
-			
+
 			xlsProvider.generateExcelFileWithAllDataFromDb("C:\\Users\\danelczykl\\Desktop\\Raport_czynnosci.xlsx");
-			 			
+
 		} catch (IOException e) {
-			
+
 			e.printStackTrace();
 		}
 
