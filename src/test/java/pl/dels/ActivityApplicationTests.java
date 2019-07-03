@@ -12,5 +12,6 @@ public class ActivityApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		
 	}
 }
