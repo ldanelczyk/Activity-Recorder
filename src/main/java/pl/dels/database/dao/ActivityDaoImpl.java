@@ -29,8 +29,6 @@ public class ActivityDaoImpl implements ActivityDao {
 										+ "WHERE (CZYNNOSC_SYMBOL = 'Pisanie programu AOI' AND (DATA_OD BETWEEN '" + startDate + "' AND '"+ stopDate + "') AND GRUPA_ZASOBOW = 'SMT') \r\n"
 										+ "OR    (CZYNNOSC_SYMBOL = 'Poprawa programu AOI' AND (DATA_OD BETWEEN '" + startDate + "' AND '"+ stopDate + "') AND GRUPA_ZASOBOW = 'SMT')";
 
-		System.out.println(getAllChartActivities);
-
 		List<ChartActivity> chartActivityList = new ArrayList<>();
 
 		try (Connection connection = ConnectionProvider.getInstance().getConnection();
