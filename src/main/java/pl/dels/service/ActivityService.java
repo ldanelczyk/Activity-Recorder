@@ -74,67 +74,65 @@ public class ActivityService {
 		return activities;
 	}
 	
-	public List<ChartActivity> getFilteredChartActivitiesFromMySql() {
+	public List<ChartActivity> getProcessedChartActivitiesFromMySql() {
 		
 		List<Activity> aoiActivities = getAllActivitiesFromMySql((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
+							
+		//TEMP
+		String sundayOfTheWeek = "2019-06-20";
 		
 		List<String> dateBetween = DateToolsProvider.getDatesBetween();
-	
-		System.out.println();
-		System.out.println("Daty które mają być sprawdzane docelowo");
 		
+		//Weryfikacja dat
+		System.out.println();
+		System.out.println("Docelowo przetwarzane daty:");
 		dateBetween.forEach(System.out::println);
-				
-		//TEMP
-		String mondayOfTheWeek = "2019-06-18";
-		String sundayOfTheWeek = "2019-06-20";	
-
-		//POPRAWIĆ FILTROWANIE ABY BYŁO POMIEDZY TYGODNIE
-		/*List<Activity> filteredActivityList = aoiActivities.stream()
-		.filter(activity -> dateBetween.stream().anyMatch(date -> date.equals(String.valueOf(activity.getStartDateTime()).substring(0, 10))))
-		.collect(Collectors.toList());*/
-		
+	
 		List<ChartActivity> chartActivityAoiList = aoiActivities.stream()
-												.filter(activity -> String.valueOf(activity.getStartDateTime()).substring(0, 10).equals(sundayOfTheWeek))
-												.map(activity -> new ChartActivity(activity.getWorkOrder(),aoiActivities.stream()
-														.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
-														.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
-												.sorted((activity1, activity2) -> activity1.getWorkOrder().compareTo(activity2.getWorkOrder()))
-												.distinct()
-												.collect(Collectors.toList());
-		//Weryfikacja czynności
+							.filter(activity -> String.valueOf(activity.getStartDateTime()).substring(0, 10).equals(sundayOfTheWeek))
+							//.filter(activity -> dateBetween.stream().anyMatch(date -> date.equals(String.valueOf(activity.getStartDateTime()).substring(0, 10))))
+							.map(activity -> new ChartActivity(activity.getWorkOrder(),aoiActivities.stream()
+										.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
+										.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
+							.sorted((activity1, activity2) -> activity1.getWorkOrder().compareTo(activity2.getWorkOrder()))
+							.distinct()
+							.collect(Collectors.toList());
+		
+		//Weryfikacja czynności	AR
 		System.out.println();
-		System.out.println("Czynności AR:");
-
+		System.out.println("Czynności AR po filtrowaniu:");
 		chartActivityAoiList.forEach(System.out::println);
 		
 		return chartActivityAoiList;
 	}
 	
-	public List<ChartActivity> getFilteredChartActivitiesFromFirebird() throws ClassNotFoundException, IOException {
+	public List<ChartActivity> getProcessedChartActivitiesFromFirebird() throws ClassNotFoundException, IOException {
 				
 		//TEMP
 		String mondayOfTheWeek = "2019-06-18";
-		String sundayOfTheWeek = "2019-06-26";	
+		String sundayOfTheWeek = "2019-06-26";
 		
+		/*String mondayOfTheWeek = DateToolsProvider.getMondayOfTheWeek();
+		String sundayOfTheWeek = DateToolsProvider.getSundayOfTheWeek();*/
 		
 		List<ChartActivity> kronosActivities = activityDao.getAllActivities(mondayOfTheWeek, sundayOfTheWeek);
 		
+		//Weryfikacja czynności	Kronos
+		System.out.println();
 		System.out.println("Czynności KRONOS przed filtrowaniem:");
-
 		kronosActivities.forEach(System.out::println);
 
 		List<ChartActivity> chartActivityKronosList = kronosActivities.stream()
-												.map(activity -> new ChartActivity(activity.getWorkOrder(),kronosActivities.stream()
-														.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
-														.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
-												.sorted((activityWO1, activityWO2) -> activityWO1.getWorkOrder().compareTo(activityWO2.getWorkOrder()))
-												.distinct()
-												.collect(Collectors.toList());
-		//Weryfikacja czynności	
+							.map(activity -> new ChartActivity(activity.getWorkOrder(),kronosActivities.stream()
+										.filter(activityWO -> activityWO.getWorkOrder().equals(activity.getWorkOrder()))
+										.mapToDouble(activityWO -> activityWO.getDowntime()).sum()))
+							.sorted((activityWO1, activityWO2) -> activityWO1.getWorkOrder().compareTo(activityWO2.getWorkOrder()))
+							.distinct()
+							.collect(Collectors.toList());
+		
+		//Weryfikacja czynności	Kronos
 		System.out.println();
-		System.out.println("Czynności KRONOS:");
-
+		System.out.println("Czynności KRONOS po filtrowaniu:");
 		chartActivityKronosList.forEach(System.out::println);
 		
 		return chartActivityKronosList;
@@ -155,13 +153,6 @@ public class ActivityService {
 	public ActivityService(ActivityRepository activityRepository) {
 		super();
 		this.activityRepository = activityRepository;
-	}
-
-	public ActivityService(ActivityDao activityDao, ActivityRepository activityRepository) {
-		super();
-		this.activityDao = activityDao;
-		this.activityRepository = activityRepository;
-
 	}
 
 	public ActivityService(ActivityRepository activityRepository, UserRepository userRepository) {
