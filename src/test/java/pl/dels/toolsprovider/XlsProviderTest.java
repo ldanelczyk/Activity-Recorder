@@ -44,9 +44,6 @@ import pl.dels.service.ActivityService;
 
 class XlsProviderTest {
 
-	private XlsProvider xlsProvider;
-	private ActivityService activityService;
-
 	/*
 	 * @AfterAll static void removeTestFile() {
 	 * 
@@ -71,14 +68,14 @@ class XlsProviderTest {
 		// given
 		ActivityRepository activityRepository = mock(ActivityRepository.class);
 
-		activityService = new ActivityService(activityRepository);
+		ActivityService activityService = new ActivityService(activityRepository);
 		
 		List<Activity> listWithPreparedActivities = createActivities();
 
 		given(activityService.getAllActivitiesFromMySql((a1, a2) -> a1.getWorkOrder().compareTo(a2.getWorkOrder())))
 				.willReturn(listWithPreparedActivities);
 		
-		xlsProvider = new XlsProvider(activityService);
+		XlsProvider xlsProvider = new XlsProvider(activityService);
 
 		// when
 		xlsProvider.generateExcelFileWithAllDataFromDb("test.xlsx");
@@ -104,33 +101,30 @@ class XlsProviderTest {
 		}
 	}
 
-	@Test
+	/*@Test
 	void generateExcelFileWithChartFromAGivenWeek() throws ClassNotFoundException, IOException {
 
-		/*// given
+		// given
 		List<Activity> listWithPreparedActivities = createActivities();
 		List<ChartActivity> listWithPreparedMySqlActivities = createChartActivitiesForMySql();
 		List<ChartActivity> listWithPreparedFireBirdActivities = createChartActivitiesForFireBird();
 		
+		ActivityRepository activityRepository = mock(ActivityRepository.class);	
 		ActivityDao activityDao = mock(ActivityDaoImpl.class);
-		ActivityRepository activityRepository = mock(ActivityRepository.class);
 			
-		activityService = new ActivityService(activityDao, activityRepository);
+		ActivityService activityService = new ActivityService(activityRepository, activityDao);
 		
-		given(activityService.getAllActivitiesFromMySql((a1, a2) -> a1.getWorkOrder().compareTo(a2.getWorkOrder())))
-		.willReturn(listWithPreparedActivities);
-		given(activityService.getFilteredChartActivitiesFromMySql()).willReturn(listWithPreparedMySqlActivities);
-		given(activityService.getFilteredChartActivitiesFromFirebird()).willReturn(listWithPreparedFireBirdActivities);
+		given(activityRepository.findAll()).willReturn(listWithPreparedActivities);	
+		given(activityService.getProcessedChartActivitiesFromMySql()).willReturn(listWithPreparedMySqlActivities);
+		given(activityService.getProcessedChartActivitiesFromFirebird()).willReturn(listWithPreparedFireBirdActivities);
 
-		xlsProvider = new XlsProvider(activityService);
+		XlsProvider xlsProvider = new XlsProvider(activityService);
 	
 		// when
-		xlsProvider.generateExcelFileWithChartFromAGivenWeek("test2.xlsx");*/
-	}
+		xlsProvider.generateExcelFileWithChartFromAGivenWeek("test2.xlsx");
+	}*/
 
 	private List<ActivityPoiji> readDataFromCreatedExcelFile() throws IOException {
-
-		// PoijiOptions options = PoijiOptionsBuilder.settings(0).build();
 
 		InputStream stream = new FileInputStream(new File("test.xlsx"));
 
