@@ -165,4 +165,10 @@ public class ActivityService {
 		super();
 		this.activityDao = activityDao;
 	}
+
+	public ActivityService(ActivityRepository activityRepository, ActivityDao activityDao) {
+		super();
+		this.activityRepository = activityRepository;
+		this.activityDao = activityDao;
+	}
 }
