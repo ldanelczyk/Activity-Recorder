@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class ChartActivity {
-	
+
 	private String workOrder;
-	
+
 	private double downtime;
 }
