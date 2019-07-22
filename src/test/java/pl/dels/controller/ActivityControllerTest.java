@@ -83,7 +83,7 @@ class ActivityControllerTest {
 		verifyNoMoreInteractions(activityService);
 	}
 
-	@Test
+	/*@Test
 	public void stopRegistration_shouldReturnStartedPageAndAddTempActivityAsAttribute() throws Exception {
 
 		MockitoAnnotations.initMocks(this);
@@ -108,7 +108,7 @@ class ActivityControllerTest {
 				.param("activityType", activityType)
 				.param("comments", comments))
 				.andExpect(view().name("redirect:addOk"));
-	}
+	}*/
 	
 	@Test
 	public void shouldReturnAddOkPage() throws Exception {
