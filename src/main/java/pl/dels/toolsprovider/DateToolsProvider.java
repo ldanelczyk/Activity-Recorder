@@ -40,7 +40,8 @@ public class DateToolsProvider {
 		LocalDate startDate = getMondayOfTheWeek();
 
 		return IntStream.iterate(0, i -> i + 1)
-				.limit(7).mapToObj(i -> startDate.plusDays(i))
+				.limit(7)
+				.mapToObj(i -> startDate.plusDays(i))
 				.map(i -> String.valueOf(i))
 				.collect(Collectors.toList());
 	}
