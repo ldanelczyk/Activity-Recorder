@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.mock;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -13,22 +14,20 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.io.IOException;
+
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import pl.dels.database.dao.ActivityDao;
-import pl.dels.database.dao.ActivityDaoImpl;
 import pl.dels.database.repository.ActivityRepository;
 import pl.dels.database.repository.UserRepository;
 import pl.dels.model.Activity;
 import pl.dels.model.ChartActivity;
 import pl.dels.model.enums.MachineNumber;
 import pl.dels.model.enums.Side;
-import pl.dels.toolsprovider.TimeToolsProvider;
 
 class ActivityServiceTest {
 	
