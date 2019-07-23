@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
+
 import lombok.NoArgsConstructor;
 
 import pl.dels.model.User;
@@ -18,7 +19,6 @@ import pl.dels.model.enums.MachineNumber;
 import pl.dels.model.enums.Side;
 import pl.dels.toolsprovider.DateToolsProvider;
 import pl.dels.database.dao.ActivityDao;
-import pl.dels.database.dao.ActivityDaoImpl;
 import pl.dels.database.repository.ActivityRepository;
 import pl.dels.database.repository.UserRepository;
 import pl.dels.model.Activity;
