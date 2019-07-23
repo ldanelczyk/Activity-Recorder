@@ -14,7 +14,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.BDDMockito.given;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -34,7 +33,6 @@ import com.poiji.exception.PoijiExcelType;
 import pl.dels.database.dao.ActivityDao;
 import pl.dels.database.dao.ActivityDaoImpl;
 import pl.dels.database.repository.ActivityRepository;
-import pl.dels.database.repository.UserRepository;
 import pl.dels.model.Activity;
 import pl.dels.model.ChartActivity;
 import pl.dels.model.User;
@@ -44,23 +42,12 @@ import pl.dels.service.ActivityService;
 
 class XlsProviderTest {
 
-	/*
-	 * @AfterAll static void removeTestFile() {
-	 * 
-	 * File testedFile = new File("test.xlsx"); testedFile.delete(); }
-	 */
+	@AfterAll
+	static void removeTestFile() {
 
-	
-/*	private void prepareMockForXls() {
-
-		ActivityRepository activityRepository = mock(ActivityRepository.class);
-		UserRepository userRepository = mock(UserRepository.class);
-		ActivityDao activityDao = mock(ActivityDaoImpl.class);
-
-		activityService = new ActivityService(activityRepository, userRepository, activityDao);
-
-		xlsProvider = new XlsProvider(activityService);
-	}*/
+		File testedFile = new File("test.xlsx");
+		testedFile.delete();
+	}
 
 	@Test
 	void generateExcelFileWithAllDataFromDb() throws IOException {
@@ -69,12 +56,12 @@ class XlsProviderTest {
 		ActivityRepository activityRepository = mock(ActivityRepository.class);
 
 		ActivityService activityService = new ActivityService(activityRepository);
-		
+
 		List<Activity> listWithPreparedActivities = createActivities();
 
 		given(activityService.getAllActivitiesFromMySql((a1, a2) -> a1.getWorkOrder().compareTo(a2.getWorkOrder())))
 				.willReturn(listWithPreparedActivities);
-		
+
 		XlsProvider xlsProvider = new XlsProvider(activityService);
 
 		// when
@@ -84,7 +71,7 @@ class XlsProviderTest {
 
 		// then
 		assertEquals("ZRYYYY", listWithRodeObjects.get(0).getWorkOrder());
-		// verify(activityRepository, times(1)).findAll();
+		verify(activityRepository, times(1)).findAll();
 		assertThat(listWithRodeObjects, hasSize(3));
 
 		for (ActivityPoiji activityPoiji : listWithRodeObjects) {
@@ -101,27 +88,33 @@ class XlsProviderTest {
 		}
 	}
 
-	/*@Test
-	void generateExcelFileWithChartFromAGivenWeek() throws ClassNotFoundException, IOException {
-
-		// given
-		List<Activity> listWithPreparedActivities = createActivities();
-		List<ChartActivity> listWithPreparedMySqlActivities = createChartActivitiesForMySql();
-		List<ChartActivity> listWithPreparedFireBirdActivities = createChartActivitiesForFireBird();
-		
-		ActivityRepository activityRepository = mock(ActivityRepository.class);	
-		ActivityDao activityDao = mock(ActivityDaoImpl.class);
-			
-		ActivityService activityService = new ActivityService(activityRepository, activityDao);
-		
-		given(activityRepository.findAll()).willReturn(listWithPreparedActivities);	
-		given(activityService.getProcessedChartActivitiesFromMySql()).willReturn(listWithPreparedMySqlActivities);
-		given(activityService.getProcessedChartActivitiesFromFirebird()).willReturn(listWithPreparedFireBirdActivities);
-
-		XlsProvider xlsProvider = new XlsProvider(activityService);
-	
-		// when
-		xlsProvider.generateExcelFileWithChartFromAGivenWeek("test2.xlsx");
+	/*@Test 
+	void generateExcelFileWithChartFromAGivenWeek() throws
+	 ClassNotFoundException, IOException {
+	  
+	  // given 
+	  List<Activity> listWithPreparedActivities = createActivities();
+	  List<ChartActivity> listWithPreparedMySqlActivities =
+	  createChartActivitiesForMySql(); List<ChartActivity>
+	  listWithPreparedFireBirdActivities = createChartActivitiesForFireBird();
+	  
+	  ActivityRepository activityRepository = mock(ActivityRepository.class);
+	  ActivityDao activityDao = mock(ActivityDaoImpl.class);
+	  
+	  ActivityService activityService = new ActivityService(activityRepository,
+	  activityDao);
+	  
+	  given(activityRepository.findAll()).willReturn(listWithPreparedActivities);
+	  given(activityService.getProcessedChartActivitiesFromMySql()).willReturn(
+	  listWithPreparedMySqlActivities);
+	  given(activityService.getProcessedChartActivitiesFromFirebird()).willReturn(
+	  listWithPreparedFireBirdActivities);
+	 
+	  XlsProvider xlsProvider = new XlsProvider(activityService);
+	 
+	  // when 
+	  xlsProvider.generateExcelFileWithChartFromAGivenWeek("test2.xlsx"); 
+	  
 	}*/
 
 	private List<ActivityPoiji> readDataFromCreatedExcelFile() throws IOException {
@@ -139,17 +132,41 @@ class XlsProviderTest {
 
 		Timestamp stopDateTime = new Timestamp(new Date().getTime());
 
-		Activity activity1 = Activity.builder().machineNumber(MachineNumber.AOI1).workOrder("ZRXXXX").side(Side.TOP)
-				.activityType("poprawa programu AOI").comments("Example Comment4").startDateTime(startDateTime)
-				.stopDateTime(stopDateTime).downtime(0.015).user(new User("username", "encodedPassword")).build();
+		Activity activity1 = Activity.builder()
+				.machineNumber(MachineNumber.AOI1)
+				.workOrder("ZRXXXX")
+				.side(Side.TOP)
+				.activityType("poprawa programu AOI")
+				.comments("Example Comment4")
+				.startDateTime(startDateTime)
+				.stopDateTime(stopDateTime)
+				.downtime(0.015)
+				.user(new User("username", "encodedPassword"))
+				.build();
 
-		Activity activity2 = Activity.builder().machineNumber(MachineNumber.AOI2).workOrder("ZRXXYY").side(Side.BOT)
-				.activityType("poprawa programu AOI").comments("Example Comment3").startDateTime(startDateTime)
-				.stopDateTime(stopDateTime).downtime(8.015).user(new User("username", "encodedPassword")).build();
+		Activity activity2 = Activity.builder()
+				.machineNumber(MachineNumber.AOI2)
+				.workOrder("ZRXXYY")
+				.side(Side.BOT)
+				.activityType("poprawa programu AOI")
+				.comments("Example Comment3")
+				.startDateTime(startDateTime)
+				.stopDateTime(stopDateTime)
+				.downtime(8.015)
+				.user(new User("username", "encodedPassword"))
+				.build();
 
-		Activity activity3 = Activity.builder().machineNumber(MachineNumber.AOI1).workOrder("ZRYYYY").side(Side.BOT)
-				.activityType("pisanie programu AOI").comments("Example Comment5").startDateTime(startDateTime)
-				.stopDateTime(stopDateTime).downtime(10.008).user(new User("username", "encodedPassword")).build();
+		Activity activity3 = Activity.builder()
+				.machineNumber(MachineNumber.AOI1)
+				.workOrder("ZRYYYY")
+				.side(Side.BOT)
+				.activityType("pisanie programu AOI")
+				.comments("Example Comment5")
+				.startDateTime(startDateTime)
+				.stopDateTime(stopDateTime)
+				.downtime(10.008)
+				.user(new User("username", "encodedPassword"))
+				.build();
 
 		return Arrays.asList(activity1, activity2, activity3);
 	}
