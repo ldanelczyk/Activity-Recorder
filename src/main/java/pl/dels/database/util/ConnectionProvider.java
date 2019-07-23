@@ -27,6 +27,7 @@ public class ConnectionProvider {
 
 	private ConnectionProvider() throws ClassNotFoundException, SQLException, IOException {
 
+		@SuppressWarnings("deprecation")
 		List<String> lines = FileUtils.readLines(new File("C:\\Users\\danelczykl\\Desktop\\db_data.txt"));
 
 		url = lines.get(0);
