@@ -85,7 +85,6 @@ public class ActivityService {
 		
 		//Weryfikacja dat
 		System.out.println();
-		System.out.println("Docelowo przetwarzane daty:");
 		dateBetween.forEach(System.out::println);
 	
 		List<ChartActivity> chartActivityAoiList = aoiActivities.stream()
