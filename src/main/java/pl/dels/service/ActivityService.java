@@ -79,13 +79,11 @@ public class ActivityService {
 		List<Activity> aoiActivities = getAllActivitiesFromMySql((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
 							
 		//TEMP
-		String sundayOfTheWeek = "2019-06-20";
+		String sundayOfTheWeek = "2019-08-07";
 		
-		List<String> dateBetween = DateToolsProvider.getDatesBetween();
 		
-		//Weryfikacja dat
-		System.out.println();
-		dateBetween.forEach(System.out::println);
+		//TARGET
+		//List<String> dateBetween = DateToolsProvider.getDatesBetween();
 	
 		List<ChartActivity> chartActivityAoiList = aoiActivities.stream()
 							.filter(activity -> String.valueOf(activity.getStartDateTime()).substring(0, 10).equals(sundayOfTheWeek))
@@ -108,9 +106,10 @@ public class ActivityService {
 	public List<ChartActivity> getProcessedChartActivitiesFromFirebird() throws ClassNotFoundException, IOException {
 				
 		//TEMP
-		String mondayOfTheWeek = "2019-06-18";
-		String sundayOfTheWeek = "2019-06-26";
+		String mondayOfTheWeek = "2019-08-05";
+		String sundayOfTheWeek = "2019-08-09";
 		
+		//TARGET
 		/*String mondayOfTheWeek = DateToolsProvider.getMondayOfTheWeek();
 		String sundayOfTheWeek = DateToolsProvider.getSundayOfTheWeek();*/
 		
