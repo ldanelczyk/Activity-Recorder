@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -24,6 +25,7 @@ import com.gembox.spreadsheet.charts.*;
 import pl.dels.model.Activity;
 import pl.dels.model.ChartActivity;
 import pl.dels.service.ActivityService;
+import pl.dels.service.ChartActivityService;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,11 +35,14 @@ public class XlsProvider {
 	@Autowired
 	private ActivityService activityService;
 
+	@Autowired
+	private ChartActivityService chartActivityService;
+
 	public void generateExcelFileWithAllDataFromDb(String path) throws IOException {
 
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet sheet = workbook.createSheet("RAPORT");
-		Object[][] datatypes = {{ "Nr linii", "ZR", "STRONA", "Czynność", "Uwagi", "Data od", "Data do", "Czas", "Inżynier AOI" } };
+		Object[][] datatypes = {{"Nr linii", "ZR", "STRONA", "Czynność", "Uwagi", "Data od", "Data do", "Czas", "Inżynier AOI"}};
 
 		int rowNum = 0;
 
@@ -60,14 +65,14 @@ public class XlsProvider {
 		CreationHelper createHelper = workbook.getCreationHelper();
 		cellStyle.setDataFormat(createHelper.createDataFormat().getFormat("m/d/yy h:mm"));
 
-		List<Activity> activities = activityService.getAllActivitiesFromMySql((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
+		List<Activity> activities = activityService
+				.getAllActivitiesFromMySql((wo1, wo2) -> wo2.getWorkOrder().compareTo(wo1.getWorkOrder()));
 
 		int rowNum2 = 1;
 
 		for (Activity activity : activities) {
 
 			Row row = sheet.createRow(rowNum2++);
-
 			row.createCell(0).setCellValue(String.valueOf(activity.getMachineNumber()));
 			row.createCell(1).setCellValue(activity.getWorkOrder());
 			row.createCell(2).setCellValue(String.valueOf(activity.getSide()));
@@ -101,19 +106,38 @@ public class XlsProvider {
 		ExcelWorksheet worksheet = workbook.addWorksheet("Porownanie");
 
 		List<ChartActivity> chartActivityAoiList = activityService.getProcessedChartActivitiesFromMySql();
-
-		List<ChartActivity> chartActivityKronosList = activityService.getProcessedChartActivitiesFromFirebird();
-
+		
+		// Weryfikacja czynności AR
+				System.out.println();
+				System.out.println("Czynności AR po przetworzeniu:");
+				chartActivityAoiList.forEach(System.out::println);
+		
+		List<ChartActivity> chartActivityKronosList = chartActivityService.getProcessedChartActivitiesFromFirebird();
+		
+		// Weryfikacja czynności Kronos
+				System.out.println();
+				System.out.println("Czynności KRONOS po filtrowaniu i przetworzeniu:");
+				chartActivityKronosList.forEach(System.out::println);
+				
+		List<ChartActivity> chartActivityAoiFilteredList = chartActivityAoiList.stream()
+				.filter(aoiActivity -> chartActivityKronosList.stream().anyMatch(kronosActivity -> kronosActivity.getWorkOrder().equals(aoiActivity.getWorkOrder())))
+				.collect(Collectors.toList());
+		
+		// Weryfikacja czynności AR 2
+		System.out.println();
+		System.out.println("Czynności AR po filtrowaniu:");
+		chartActivityAoiFilteredList.forEach(System.out::println);
+		
 		ColumnChart chart = (ColumnChart) worksheet.getCharts().add(ChartType.COLUMN, "F2", "M25");
-		chart.selectData(worksheet.getCells().getSubrangeAbsolute(0, 0, chartActivityAoiList.size(), 2), true);
+		chart.selectData(worksheet.getCells().getSubrangeAbsolute(0, 0, chartActivityAoiFilteredList.size(), 2), true);
 
 		chart.getTitle().setText("Czas czynności AOI");
 		chart.getAxes().getHorizontal().getTitle().setText("Numer ZR");
 		chart.getAxes().getVertical().getTitle().setText("Czas czynności AOI [h]");
 
-		for (int i = 0; i < chartActivityAoiList.size(); i++) {
-			worksheet.getCell(i + 1, 0).setValue(chartActivityAoiList.get(i).getWorkOrder());
-			worksheet.getCell(i + 1, 1).setValue(chartActivityAoiList.get(i).getDowntime());
+		for (int i = 0; i < chartActivityKronosList.size(); i++) {
+			worksheet.getCell(i + 1, 0).setValue(chartActivityAoiFilteredList.get(i).getWorkOrder());
+			worksheet.getCell(i + 1, 1).setValue(chartActivityAoiFilteredList.get(i).getDowntime());
 			worksheet.getCell(i + 1, 2).setValue(MathToolsProvider.round(chartActivityKronosList.get(i).getDowntime(), 3));
 		}
 
@@ -128,9 +152,13 @@ public class XlsProvider {
 		int columnCount = worksheet.calculateMaxUsedColumns();
 
 		for (int i = 0; i < columnCount; i++)
-			worksheet.getColumn(i).setWidth((int) LengthUnitConverter.convert(3, LengthUnit.CENTIMETER,
-					LengthUnit.ZERO_CHARACTER_WIDTH_256_TH_PART));
+			worksheet.getColumn(i).setWidth((int) LengthUnitConverter.convert(3, LengthUnit.CENTIMETER, LengthUnit.ZERO_CHARACTER_WIDTH_256_TH_PART));
 
 		workbook.save(path);
+	}
+
+	public XlsProvider(ActivityService activityService) {
+		super();
+		this.activityService = activityService;
 	}
 }
