@@ -1,12 +1,12 @@
 package pl.dels.controller;
 
-import static org.hamcrest.CoreMatchers.anything;
+//import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasProperty;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
+//import static org.mockito.ArgumentMatchers.any;
+//import static org.mockito.BDDMockito.given;
+//import static org.mockito.Mockito.mock;
 import static org.mockito.BDDMockito.*;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import static org.junit.jupiter.api.Assertions.*;
+//import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -25,13 +25,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.sql.Timestamp;
+//import java.sql.Timestamp;
 
-import java.util.Date;
+//import java.util.Date;
 
 import pl.dels.model.Activity;
 import pl.dels.model.enums.MachineNumber;
@@ -48,9 +48,9 @@ class ActivityControllerTest {
 	@Mock
 	ActivityService activityService; 
 	
-	private Timestamp startDateTime = new Timestamp(new Date().getTime());
+	//private Timestamp startDateTime = new Timestamp(new Date().getTime());
 
-	private Timestamp stopDateTime = new Timestamp(new Date().getTime());
+	//private Timestamp stopDateTime = new Timestamp(new Date().getTime());
 
 	@Test
 	public void startRegistration_shouldReturnStartedPageAndAddTempActivityAsAttribute() throws Exception {
@@ -123,7 +123,7 @@ class ActivityControllerTest {
 				.andExpect(forwardedUrl("addSuccess"));
 	}
 	
-	private Activity createActivity() {
+/*	private Activity createActivity() {
 		
 		Activity activity = Activity.builder()
 				.machineNumber(MachineNumber.AOI2)
@@ -137,7 +137,7 @@ class ActivityControllerTest {
 				.build();
 		
 		return activity;
-	}
+	}*/
 
 	Activity createTempActivity() {
 

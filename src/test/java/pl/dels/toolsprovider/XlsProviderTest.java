@@ -30,11 +30,8 @@ import java.util.List;
 import com.poiji.bind.Poiji;
 import com.poiji.exception.PoijiExcelType;
 
-import pl.dels.database.dao.ActivityDao;
-import pl.dels.database.dao.ActivityDaoImpl;
 import pl.dels.database.repository.ActivityRepository;
 import pl.dels.model.Activity;
-import pl.dels.model.ChartActivity;
 import pl.dels.model.User;
 import pl.dels.model.enums.MachineNumber;
 import pl.dels.model.enums.Side;
@@ -171,7 +168,7 @@ class XlsProviderTest {
 		return Arrays.asList(activity1, activity2, activity3);
 	}
 
-	private List<ChartActivity> createChartActivitiesForMySql() {
+	/*private List<ChartActivity> createChartActivitiesForMySql() {
 
 		ChartActivity chartActivity1 = new ChartActivity("25234", 1.7);
 
@@ -191,5 +188,5 @@ class XlsProviderTest {
 		ChartActivity chartActivity3 = new ChartActivity("25280", 3.2);
 
 		return Arrays.asList(chartActivity1, chartActivity2, chartActivity3);
-	}
+	}*/
 }
