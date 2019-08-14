@@ -16,7 +16,7 @@ import pl.dels.database.util.ConnectionProvider;
 import pl.dels.model.ChartActivity;
 
 @Repository
-public class ActivityDaoImpl implements ActivityDao {
+public class ChartActivityDaoImpl implements ChartActivityDao {
 
 	private final int TIME_DIVIDER = 3600;
 
@@ -26,8 +26,8 @@ public class ActivityDaoImpl implements ActivityDao {
 
 		String getAllChartActivities = "SELECT DISTINCT ZR, CZAS_TRWANIA \r\n"
 										+ "from TS_KRONOS_WYKONANIA_CZYNNOSCI \r\n"
-										+ "WHERE (CZYNNOSC_SYMBOL = 'Pisanie programu AOI' AND (DATA_OD BETWEEN '" + startDate + "' AND '"+ stopDate + "')) \r\n"
-										+ "OR    (CZYNNOSC_SYMBOL = 'Poprawa programu AOI' AND (DATA_OD BETWEEN '" + startDate + "' AND '"+ stopDate + "'))";
+										+ "WHERE (CZYNNOSC_SYMBOL = 'Pisanie programu AOI' AND (DATA_OD BETWEEN '" + startDate + "' AND '"+ stopDate + "') AND GRUPA_ZASOBOW = 'SMT') \r\n"
+										+ "OR    (CZYNNOSC_SYMBOL = 'Poprawa programu AOI' AND (DATA_OD BETWEEN '" + startDate + "' AND '"+ stopDate + "') AND GRUPA_ZASOBOW = 'SMT')";
 
 		List<ChartActivity> chartActivityList = new ArrayList<>();
 
